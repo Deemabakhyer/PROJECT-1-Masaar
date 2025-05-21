@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-//import 'package:masaar/views/search_bar.dart';
 import 'package:masaar/views/test.dart';
 
 void main() {

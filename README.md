@@ -66,6 +66,7 @@ View the complete design on [Figma](https://www.figma.com/design/synPECe3VTrOajQ
 - [Smooth Page Indicator](https://pub.dev/packages/smooth_page_indicator) – Page transitions
 - [Shared Preferences](https://pub.dev/packages/shared_preferences) – Local data storage
 - [Supabase Flutter](https://pub.dev/packages/supabase_flutter) – Backend services
+- [Cupertino Icons](https://pub.dev/packages/cupertino_icons) - Default icon package for UI
 
 ## 🧩 Custom Widgets
 - Custom Button  

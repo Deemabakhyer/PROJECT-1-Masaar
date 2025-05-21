@@ -17,6 +17,20 @@ class CustomSearchBar extends StatefulWidget {
 }
 
 class _CustomSearchBarState extends State<CustomSearchBar> {
+  @override
+  void initState() {
+    super.initState();
+    focusNode.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    focusNode.dispose();
+    super.dispose();
+  }
+
   final FocusNode focusNode = FocusNode();
   final List places = [
     'Masjid Al-Haram',
@@ -35,19 +49,24 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   Widget build(BuildContext context) {
     return SearchAnchor(
       builder: (BuildContext context, SearchController controller) {
-        return SizedBox(
+        return Container(
           height: 50,
           width: 350,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color:
+                  focusNode.hasFocus
+                      ? const Color(0xFF6A42C2)
+                      : Colors.transparent,
+              width: 2,
+            ),
+            borderRadius: BorderRadius.circular(7),
+          ),
+
           child: SearchBar(
-            shape: WidgetStatePropertyAll(RoundedRectangleBorder()),
-            overlayColor: WidgetStateProperty.resolveWith<Color?>((
-              Set<WidgetState> states,
-            ) {
-              if (states.contains(WidgetState.focused)) {
-                return Colors.blue.withValues(alpha: 0.2); // overlay on focus
-              }
-              return null;
-            }),
+            shape: WidgetStatePropertyAll(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+            ),
             leading: widget.leadingIcon,
             hintText: widget.hintText,
             trailing: [SizedBox(width: 40, child: widget.trailing)],
@@ -84,3 +103,10 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
     );
   }
 }
+
+// How to use:
+//  CustomSearchBar(
+//             leadingIcon: Icon(Icons.search),
+//             hintText: 'text here',
+//             trailing: IconButton(onPressed: () {}, icon: Icon(Icons.clear)),
+//           ),
