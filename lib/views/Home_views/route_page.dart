@@ -3,127 +3,20 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:masaar/controllers/location_controller.dart';
+import 'package:masaar/views/Home_views/home_page.dart';
 import 'package:masaar/widgets/custom_button.dart';
 import 'package:masaar/widgets/custom_search_bar.dart';
+import 'package:masaar/controllers/location_controller.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-final locationController = Get.put(LocationController());
-
-class _HomePageState extends State<HomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        //Map 
-        FlutterMap(
-          options: MapOptions(
-            initialCenter: LatLng(21.4167, 39.8167),
-            initialZoom: 16,
-            minZoom: 5,
-            maxZoom: 18,
-            interactionOptions: const InteractionOptions(
-              flags: InteractiveFlag.all,
-            ),
-          ),
-          children: [
-            TileLayer(
-              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              userAgentPackageName: 'com.example.app',
-            ),
-            MarkerLayer(
-              markers: [
-                Marker(
-                  point: LatLng(21.4167, 39.8167),
-                  child: const Icon(
-                    Icons.location_pin,
-                    size: 50,
-                    color: Colors.red,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-
-        // Bottom Sheet with the Search Bar inside
-        Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 8,
-                  offset: Offset(0, -2),
-                ),
-              ],
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // change shadow
-                  Container(
-                    width: 40,
-                    height: 4,
-                    margin: const EdgeInsets.only(bottom: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[400],
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-
-                  // Your Custom Search Bar
-                  SearchBar(
-                    backgroundColor: const WidgetStatePropertyAll(
-                      Color(0xFFF5F5F5),
-                    ),
-                    shape: WidgetStatePropertyAll(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(7),
-                      ),
-                    ),
-                    leading: Icon(Ionicons.search),
-                    hintText: 'Where to?',
-                    onTap: () {
-                      Get.toNamed('/route');
-                    },
-                    trailing: [
-                      IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 12),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class RoutePage extends StatelessWidget {
+class RoutePage extends StatefulWidget {
   const RoutePage({super.key});
+
+  @override
+  State<RoutePage> createState() => _RoutePageState();
+}
+
+class _RoutePageState extends State<RoutePage> {
+  final TextEditingController routeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -146,9 +39,7 @@ class RoutePage extends StatelessWidget {
                     hintText: 'Route',
                     trailing: IconButton(
                       icon: Icon(Icons.clear),
-                      onPressed: () {
-                        // Clear logic
-                      },
+                      onPressed: () {},
                     ),
                   ),
                 ),
@@ -189,36 +80,40 @@ class RoutePage extends StatelessWidget {
             Row(
               children: [
                 SizedBox(width: 8),
-                Icon(Ionicons.navigate),
+                Image.asset(
+                  'images/mouse_pointer.png',
+                  width: 23.97,
+                  height: 23.97,
+                ),
                 const SizedBox(width: 8),
                 GestureDetector(
                   onTap: () async {
-                    await locationController.getCurrentLocation();
-                    Get.toNamed(
-                      '/route',
-                      arguments: {
-                        'origin': locationController.currentAddress.value,
-                      },
-                    );
+                    // await locationController.getCurrentLocation();
+                    // Get.toNamed(
+                    //   '/route',
+                    //   arguments: {
+                    //     'origin': locationController.currentAddress.value,
+                    //   },
+                    // );
                   },
-                  child: Obx(
-                    () => Text(
-                      locationController.currentAddress.value.isEmpty
-                          ? "My Location"
-                          : locationController.currentAddress.value,
-                      style: const TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                  ),
+                  // child: Obx(
+                  //   // () => Text(
+                  //   //   // locationController.currentAddress.value.isEmpty
+                  //   //   //     ? "My Location"
+                  //   //   //     : locationController.currentAddress.value,
+                  //   //   // style: const TextStyle(fontWeight: FontWeight.w500),
+                  //   // ),
+                  // ),
                 ),
               ],
             ),
             Divider(thickness: 1),
-            const Row(
+            Row(
               children: [
-                SizedBox(width: 10),
-                Icon(Ionicons.location_outline),
-                SizedBox(width: 8),
-                Text("Wadi Makkah Company"),
+                const SizedBox(width: 10),
+                Image.asset('images/pin.png', width: 23.97, height: 23.97),
+                const SizedBox(width: 8),
+                const Text("Wadi Makkah Company"),
               ],
             ),
           ],
@@ -236,7 +131,7 @@ class Routeconfirmation extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          //Map 
+          //Map
           FlutterMap(
             options: MapOptions(
               initialCenter: LatLng(21.4167, 39.8167), // Wadi Makkah
@@ -283,7 +178,9 @@ class Routeconfirmation extends StatelessWidget {
               backgroundColor: Color(0xFF6A42C2),
               child: IconButton(
                 icon: const Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  Get.back();
+                },
               ),
             ),
           ),
@@ -409,7 +306,9 @@ class Destinationconfirmation extends StatelessWidget {
               backgroundColor: Color(0xFF6A42C2),
               child: IconButton(
                 icon: const Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  Get.back();
+                },
               ),
             ),
           ),
@@ -439,7 +338,6 @@ class Destinationconfirmation extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    
                     Container(
                       width: 40,
                       height: 4,
@@ -451,7 +349,7 @@ class Destinationconfirmation extends StatelessWidget {
                     ),
                     const Text(
                       "Wadi Makkah Company",
-                      style:  TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 28,
                         fontWeight: FontWeight.w600,
@@ -465,7 +363,7 @@ class Destinationconfirmation extends StatelessWidget {
                         text: "Confirm Destination",
                         isActive: true,
                         onPressed: () {
-                          // putting to the next page here
+                          Get.toNamed('/package_type');
                         },
                       ),
                     ),
