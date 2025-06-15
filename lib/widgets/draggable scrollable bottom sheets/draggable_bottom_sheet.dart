@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:masaar/views/arrive_to_pickup.dart';
 import 'package:masaar/widgets/popups/cancel_ride_popup.dart';
 
 class DraggableBottomSheet extends StatefulWidget {
@@ -20,14 +21,17 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet>
 
     controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 10), // your loading duration
+      duration: const Duration(seconds: 10), // loading duration
     )..addListener(() {
       setState(() {});
       if (controller.value >= 1.0) {
         setState(() {
           _currentPage++;
-          if (_currentPage > 1) {
-            _currentPage = 0; // Reset to first page after last
+          if (_currentPage > 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ArriveToPickup()),
+            );
           }
           // Restart the animation for cases that use the progress bar
           if (_currentPage != 2) {
@@ -130,7 +134,7 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet>
         ),
         const SizedBox(height: 24),
         InkWell(
-            onTap: () {
+          onTap: () {
             showDialog(
               context: context,
               builder: (context) => CancelRidePopup(),

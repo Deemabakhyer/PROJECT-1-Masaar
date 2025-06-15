@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-// import 'package:masaar/views/assigning_driver.dart';
-// import 'package:masaar/views/map.dart';
-import 'package:masaar/views/newmap.dart';
+import 'package:masaar/views/assigning_driver.dart';
+import 'package:masaar/views/heading_to_destination.dart';
 import 'package:permission_handler/permission_handler.dart';
+import  'package:masaar/views/map.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Permission.locationWhenInUse.isDenied.then((valueOfPermission) {
     if (valueOfPermission) {
       Permission.locationWhenInUse.request();
@@ -19,6 +20,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Newmap());
+    return MaterialApp(home: AssigningDriver());
   }
 }
