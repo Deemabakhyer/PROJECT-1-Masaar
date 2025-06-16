@@ -68,7 +68,7 @@ class _AddCardState extends State<AddCard> {
                       child: IconButton(
                         icon: const Icon(Icons.clear),
                         onPressed: () {
-                          Get.back(); // Navigate back in your stack
+                          Get.back(); 
                         },
                       ),
                     ),
@@ -194,7 +194,7 @@ class _AddCardState extends State<AddCard> {
                         text: "Add card",
                         isActive: true,
                         onPressed: () {
-                          // Add card logic here
+                          // logic 
                         },
                       ),
                     ),
