@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:masaar/views/Home_views/home_page.dart';
 // import 'package:masaar/views/home_page.dart';
 
 // Main App
@@ -27,7 +28,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   final List<Widget> _pages = const [
     // put your pages here
-    // HomePage(),
+    HomePage(),
     // Ridepage(),
     // AccountPage(),
   ];
