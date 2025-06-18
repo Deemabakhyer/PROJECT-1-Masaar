@@ -42,9 +42,9 @@ dependencies:
   ionicons: ^0.2.2
   dropdown_button2: ^2.3.9
   moyasar: ^2.0.18
-  google_maps_flutter: ^2.12.2
   http: ^1.4.0
-
+  smooth_page_indicator: ^1.2.1
+  shared_preferences: ^2.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -79,6 +79,12 @@ flutter:
     - images/Card_numb.png
     - images/pin.png
     - images/mouse_pointer.png
+    - images/des.png
+    - images/pickup.png
+    - images/back_button.png
+    - images/visa.png
+    - images/visa_logo.png
+    - images/mada.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
