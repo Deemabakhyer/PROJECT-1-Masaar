@@ -44,14 +44,7 @@ class _ActiveCardsState extends State<ActiveCards> {
             child: Image.asset('images/back_button.png'),
           ),
         ),
-        title: const Text(
-          'Wallet',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w600,
-            color: Colors.black,
-          ),
-        ),
+
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,

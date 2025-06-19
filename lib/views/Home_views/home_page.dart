@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:latlong2/latlong.dart';
+
 import 'package:masaar/controllers/location_controller.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,39 +16,113 @@ class HomePage extends StatefulWidget {
 final locationController = Get.put(LocationController());
 
 class _HomePageState extends State<HomePage> {
+  final LocationController locationController = Get.put(LocationController());
+  final MapController _mapController = MapController();
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        //Map
+        // MAP
         FlutterMap(
+          mapController: _mapController,
           options: MapOptions(
             initialCenter: LatLng(21.4167, 39.8167),
-              initialZoom: 16, 
-minZoom: 5,     
-maxZoom: 19,    
-            interactionOptions: const InteractionOptions(
-              flags: InteractiveFlag.all,
-            ),
+            initialZoom: 16,
           ),
           children: [
             TileLayer(
               urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              userAgentPackageName: 'com.example.app',
+              subdomains: const ['a', 'b', 'c'],
+              userAgentPackageName: 'com.example.masaar',
             ),
-            MarkerLayer(
-              markers: [
-                // Marker(
-                //   point: LatLng(21.4167, 39.8167),
-                //   child: const Icon(
-                //     Icons.location_pin,
-                //     size: 50,
-                //     color: Colors.red,
-                //   ),
-                // ),
-              ],
-            ),
+            Obx(() {
+              final LatLng position = locationController.currentLocation.value;
+              return MarkerLayer(
+                markers: [
+                  Marker(
+                    point: position,
+                    width: 100,
+                    height: 100,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Transform.rotate(
+                          angle:
+                              0, 
+                          child: Container(
+                            width: 60,
+                            height: 60,
+                            decoration: const BoxDecoration(
+                              gradient: RadialGradient(
+                                center: Alignment.topCenter,
+                                radius: 1.0,
+                                colors: [
+                                  Color.fromARGB(
+                                    100,
+                                    33,
+                                    150,
+                                    243,
+                                  ), // blue transparent
+                                  Colors.transparent,
+                                ],
+                                stops: [0.2, 1.0],
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        Container(
+                          width: 26,
+                          height: 26,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                          ),
+                        ),
+
+                        Container(
+                          width: 18,
+                          height: 18,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            }),
           ],
+        ),
+
+        // LOCATION BUTTON
+        Positioned(
+          bottom: 140,
+          right: 16,
+          child: GestureDetector(
+            onTap: () {
+              final current = locationController.currentLocation.value;
+              _mapController.move(current, 16);
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              padding: const EdgeInsets.all(12),
+              child: const Icon(Icons.my_location, color: Colors.black),
+            ),
+          ),
         ),
 
         // Bottom Sheet with the Search Bar inside

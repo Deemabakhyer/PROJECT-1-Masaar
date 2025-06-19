@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:masaar/views/Home_views/home_page.dart';
-import 'package:masaar/widgets/custom_button.dart';
-import 'package:masaar/widgets/custom_search_bar.dart';
 import 'package:masaar/controllers/location_controller.dart';
+import 'package:masaar/widgets/CustomSearchBar2.dart';
 
 class RoutePage extends StatefulWidget {
   const RoutePage({super.key});
@@ -16,7 +13,15 @@ class RoutePage extends StatefulWidget {
 }
 
 class _RoutePageState extends State<RoutePage> {
-  final TextEditingController routeController = TextEditingController();
+  final locationController = Get.put(LocationController());
+  final TextEditingController pickupController = TextEditingController();
+  final TextEditingController destinationController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    pickupController.text = locationController.pickupAddressController.text;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +31,6 @@ class _RoutePageState extends State<RoutePage> {
         title: const Text("Your Route"),
         backgroundColor: Colors.white,
       ),
-
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 19.0),
         child: Column(
@@ -34,44 +38,97 @@ class _RoutePageState extends State<RoutePage> {
             Row(
               children: [
                 Expanded(
-                  child: CustomSearchBar(
-                    leadingIcon: Icon(Ionicons.search),
-                    hintText: 'Route',
-                    trailing: IconButton(
-                      icon: Icon(Icons.clear),
-                      onPressed: () {},
+                  child: Focus(
+                    onKey: (node, event) {
+                      if (event.logicalKey == LogicalKeyboardKey.enter) {
+                        Get.toNamed('/pickup', arguments: 'Search submitted');
+                        return KeyEventResult.handled;
+                      }
+                      return KeyEventResult.ignored;
+                    },
+                    child: CustomSearchBar2(
+                      controller: pickupController,
+                      leadingIcon: const Icon(Ionicons.search),
+                      hintText: "Select Route",
+                      onSubmitted: (value) {
+                        locationController.searchAndSetLocation(value, true);
+                      },
+                      trailing: IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          pickupController.clear();
+                          locationController.pickupLocation.value = null;
+                        },
+                      ),
+                      onPlaceSelected: (place) {
+                        pickupController.text = place.name;
+
+                        locationController.pickupLocation.value =
+                            place.coordinates;
+                        locationController.pickupAddressController.text =
+                            place.name;
+                        locationController.currentAddress.value = place.name;
+
+                        Get.toNamed('/pickup');
+                      },
                     ),
                   ),
                 ),
                 const SizedBox(width: 8),
                 InkWell(
                   onTap: () {
-                    Get.toNamed('/pickup');
+                    Get.toNamed('/Routeconfirmation');
                   },
                   child: const Icon(Ionicons.add_outline),
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               children: [
                 Expanded(
-                  child: CustomSearchBar(
-                    leadingIcon: Icon(Ionicons.search),
-                    hintText: 'Destination',
-                    trailing: IconButton(
-                      onPressed: () {
-                        Get.back();
+                  child: Focus(
+                    onKey: (node, event) {
+                      if (event.logicalKey == LogicalKeyboardKey.enter) {
+                        Get.toNamed(
+                          '/Destination',
+                          arguments: 'Search submitted',
+                        );
+                        return KeyEventResult.handled;
+                      }
+                      return KeyEventResult.ignored;
+                    },
+                    child: CustomSearchBar2(
+                      controller: destinationController,
+                      leadingIcon: const Icon(Ionicons.search),
+                      hintText: "Select Destination",
+                      onSubmitted: (value) {
+                        locationController.searchAndSetLocation(value, false);
                       },
-                      icon: const Icon(Icons.clear),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          destinationController.clear();
+                          locationController.destinationLocation.value = null;
+                        },
+                      ),
+                      onPlaceSelected: (place) {
+                        locationController.destinationLocation.value =
+                            place.coordinates;
+
+                        locationController.destinationAddressController.text =
+                            place.name;
+                        locationController.destinationAddress.value =
+                            place.name;
+
+                        Get.toNamed('/Destination');
+                      },
                     ),
                   ),
                 ),
                 const SizedBox(width: 8),
                 InkWell(
-                  onTap: () {
-                    Get.toNamed('/Destination');
-                  },
+                  onTap: () {},
                   child: const Icon(Ionicons.swap_vertical),
                 ),
               ],
@@ -79,7 +136,7 @@ class _RoutePageState extends State<RoutePage> {
             const SizedBox(height: 24),
             Row(
               children: [
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Image.asset(
                   'images/mouse_pointer.png',
                   width: 23.97,
@@ -88,291 +145,48 @@ class _RoutePageState extends State<RoutePage> {
                 const SizedBox(width: 8),
                 GestureDetector(
                   onTap: () async {
-                    // await locationController.getCurrentLocation();
-                    // Get.toNamed(
-                    //   '/route',
-                    //   arguments: {
-                    //     'origin': locationController.currentAddress.value,
-                    //   },
-                    // );
+                    await locationController.getCurrentLocation();
+                    Get.toNamed(
+                      '/route',
+                      arguments: {
+                        'origin': locationController.currentAddress.value,
+                      },
+                    );
                   },
-                  // child: Obx(
-                  //   // () => Text(
-                  //   //   // locationController.currentAddress.value.isEmpty
-                  //   //   //     ? "My Location"
-                  //   //   //     : locationController.currentAddress.value,
-                  //   //   // style: const TextStyle(fontWeight: FontWeight.w500),
-                  //   // ),
-                  // ),
+                  child: Obx(
+                    () => Text(
+                      locationController.currentAddress.value.isEmpty
+                          ? "Route"
+                          : locationController.currentAddress.value,
+                      style: const TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                  ),
                 ),
               ],
             ),
-            Divider(thickness: 1),
+            const Divider(thickness: 1),
             Row(
               children: [
                 const SizedBox(width: 10),
                 Image.asset('images/pin.png', width: 23.97, height: 23.97),
                 const SizedBox(width: 8),
-                const Text("Wadi Makkah Company"),
+                GestureDetector(
+                  onTap: () {
+                    Get.toNamed('/Destination');
+                  },
+                  child: Obx(
+                    () => Text(
+                      locationController.destinationAddress.value.isEmpty
+                          ? "Destination"
+                          : locationController.destinationAddress.value,
+                      style: const TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ),
               ],
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class Routeconfirmation extends StatelessWidget {
-  const Routeconfirmation({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          //Map
-          FlutterMap(
-            options: MapOptions(
-              initialCenter: LatLng(21.4167, 39.8167), // Wadi Makkah
-              initialZoom: 17,
-              interactionOptions: const InteractionOptions(
-                flags: InteractiveFlag.all,
-              ),
-            ),
-            children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.example.app',
-              ),
-              MarkerLayer(
-                markers: [
-                  Marker(
-                    point: LatLng(21.4167, 39.8167),
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 7,
-                          ),
-                        ),
-                        // const Icon(
-                        //   Ionicons.location_outline,
-                        //   size: 40,
-                        //   color: Colors.purple,
-                        // ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-
-          //Back Button
-          Positioned(
-            top: 50,
-            left: 16,
-            child: CircleAvatar(
-              backgroundColor: Color(0xFF6A42C2),
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () {
-                  Get.back();
-                },
-              ),
-            ),
-          ),
-
-          // Bottom card
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 8,
-                    offset: Offset(0, -2),
-                  ),
-                ],
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // grip indicator
-                    Container(
-                      width: 40,
-                      height: 4,
-                      margin: const EdgeInsets.only(bottom: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[400],
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                    const Text(
-                      "Wadi Makkah Company",
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 28,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: -0.33,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 20),
-                      child: CustomButton(
-                        text: "Confirm Pickup",
-                        isActive: true,
-                        onPressed: () {
-                          Get.toNamed('/route');
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class Destinationconfirmation extends StatelessWidget {
-  const Destinationconfirmation({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          // Map
-          FlutterMap(
-            options: MapOptions(
-              initialCenter: LatLng(21.4167, 39.8167), // Wadi Makkah
-              initialZoom: 17,
-              interactionOptions: const InteractionOptions(
-                flags: InteractiveFlag.all,
-              ),
-            ),
-            children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.example.app',
-              ),
-              MarkerLayer(
-                markers: [
-                  Marker(
-                    point: LatLng(21.4167, 39.8167),
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 7,
-                          ),
-                        ),
-                        // const Icon(
-                        //   Ionicons.location_outline,
-                        //   size: 40,
-                        //   color: Colors.purple,
-                        // ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-
-          // back button
-          Positioned(
-            top: 50,
-            left: 16,
-            child: CircleAvatar(
-              backgroundColor: Color(0xFF6A42C2),
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () {
-                  Get.back();
-                },
-              ),
-            ),
-          ),
-
-          // Bottom card
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 8,
-                    offset: Offset(0, -2),
-                  ),
-                ],
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 40,
-                      height: 4,
-                      margin: const EdgeInsets.only(bottom: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[400],
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                    const Text(
-                      "Wadi Makkah Company",
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 28,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: -0.33,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 20),
-                      child: CustomButton(
-                        text: "Confirm Destination",
-                        isActive: true,
-                        onPressed: () {
-                          Get.toNamed('/package_type');
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
