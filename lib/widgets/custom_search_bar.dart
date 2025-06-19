@@ -5,7 +5,7 @@ class CustomSearchBar extends StatefulWidget {
     super.key,
     required this.leadingIcon,
     required this.hintText,
-    required this.trailing,
+    required this.trailing, required TextEditingController controller, required Null Function(dynamic value) onSubmitted,
   });
 
   final Icon leadingIcon;
@@ -17,6 +17,20 @@ class CustomSearchBar extends StatefulWidget {
 }
 
 class _CustomSearchBarState extends State<CustomSearchBar> {
+  final FocusNode focusNode = FocusNode();
+  final List<String> places = [
+    'Masjid Al-Haram',
+    'Umm al-Qura University',
+    'King Abdullah Library',
+    'Hommes Burger',
+    'Namaq Cafe',
+    'Fitness Time Gym',
+    'Haramain Railway Station',
+    'Broffee Cafe',
+    'Makkah Mall',
+    'Chirp Bakery',
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -30,20 +44,6 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
     focusNode.dispose();
     super.dispose();
   }
-
-  final FocusNode focusNode = FocusNode();
-  final List places = [
-    'Masjid Al-Haram',
-    'Umm al-Qura University',
-    'King Abdullah Library',
-    'Hommes Burger',
-    'Namaq Cafe',
-    'Fitness Time Gym',
-    'Haramain Railway Station',
-    'Broffee Cafe',
-    'Makkah Mall',
-    'Chirp Bakery',
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +62,6 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             ),
             borderRadius: BorderRadius.circular(7),
           ),
-
           child: SearchBar(
             shape: WidgetStatePropertyAll(
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
@@ -78,13 +77,18 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             onChanged: (_) {
               controller.openView();
             },
+            onSubmitted: (value) {
+              print('Submitted: $value');
+              controller.closeView(value);
+              // Optionally, perform a navigation or update UI based on the value
+            },
           ),
         );
       },
       suggestionsBuilder: (BuildContext context, SearchController controller) {
         final query = controller.text.toLowerCase();
 
-        final List filteredPlaces =
+        final List<String> filteredPlaces =
             places
                 .where((place) => place.toLowerCase().contains(query))
                 .toList();
@@ -94,6 +98,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             title: Text(place),
             onTap: () {
               setState(() {
+                
                 controller.closeView(place);
               });
             },
@@ -103,10 +108,3 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
     );
   }
 }
-
-// How to use:
-//  CustomSearchBar(
-//             leadingIcon: Icon(Icons.search),
-//             hintText: 'text here',
-//             trailing: IconButton(onPressed: () {}, icon: Icon(Icons.clear)),
-//           ),
