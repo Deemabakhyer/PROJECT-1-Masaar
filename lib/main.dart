@@ -10,8 +10,16 @@ import 'package:masaar/views/Home_views/payment_type_page.dart';
 import 'package:masaar/views/Home_views/route_page.dart';
 import 'package:masaar/views/Home_views/routeconfirmation.dart';
 import 'package:masaar/widgets/bottom_nav_bar.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() {
+void main() async {
+  await Supabase.initialize(
+    url: 'https://vrsczitnkvjsterzxqpr.supabase.co',
+
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZyc2N6aXRua3Zqc3Rlcnp4cXByIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwMzk0MDEsImV4cCI6MjA2MjYxNTQwMX0.e9JkJnDntFXaW5zgCcS-A1ebMuZOfmFW59AADrB3OM4',
+  );
+
   runApp(
     GetMaterialApp(
       debugShowCheckedModeBanner: false,
