@@ -1,13 +1,67 @@
 import 'package:flutter/material.dart';
-import 'package:masaar/views/chat.dart';
-import 'package:masaar/widgets/popups/cancel_ride_popup.dart';
+import 'package:get/get.dart';
+import 'package:masaar/widgets/custom%20widgets/cancel_ride_avatar.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
-class DriverInfo extends StatelessWidget {
-  const DriverInfo({super.key, required this.state});
+class RideDetails extends StatefulWidget {
+  const RideDetails({super.key, required this.state, required this.driverID});
+
   final String state;
+  final int driverID;
+
+  @override
+  State<RideDetails> createState() => _RideDetailsState();
+}
+
+class _RideDetailsState extends State<RideDetails> {
+  Map<String, dynamic>? _driver;
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchDriverInfo();
+  }
+
+  Future<void> fetchDriverInfo() async {
+    final response =
+        await Supabase.instance.client
+            .from('drivers')
+            .select('''
+          driver_id,
+          name,
+          rating,
+          phone_number,
+          driver_image,
+          vehicles!Driver_vehicle_id_fkey(
+            brand,
+            model,
+            plate_number,
+            color
+          )
+        ''')
+            .eq('driver_id', widget.driverID)
+            .single();
+
+    setState(() {
+      _driver = response;
+      _loading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (_loading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (_driver == null) {
+      return const Center(child: Text("Driver not found"));
+    }
+
+    final vehicle = _driver!['vehicles'];
+
     return DraggableScrollableSheet(
       initialChildSize: 0.3,
       minChildSize: 0.3,
@@ -37,12 +91,12 @@ class DriverInfo extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                // Top section: Arrival info and car
+                // Top section
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      state,
+                      widget.state,
                       style: const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.w600,
@@ -55,57 +109,74 @@ class DriverInfo extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
 
-                // Car details and driver
+                // Car and driver info
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const CircleAvatar(
+                    CircleAvatar(
                       radius: 24,
-                      backgroundColor: Color(0xFFADC8F5),
-                      child: Text(
-                        'H',
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      ),
+                      backgroundColor: const Color(0xFFADC8F5),
+                      backgroundImage:
+                          _driver!['driver_image'] != null
+                              ? NetworkImage(_driver!['driver_image'])
+                              : null,
+                      child:
+                          _driver!['driver_image'] == null
+                              ? Text(
+                                _driver!['name'][0],
+                                style: const TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
+                              )
+                              : null,
                     ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'White Toyota Yaris',
-                            style: TextStyle(
+                          Text(
+                            '${vehicle['color']} ${vehicle['brand']} ${vehicle['model']}',
+                            style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w500,
                               color: Color(0xFF919191),
                             ),
                           ),
                           const SizedBox(height: 4),
-                          const Text(
-                            'ABC 1234',
-                            style: TextStyle(
+                          Text(
+                            vehicle['plate_number'] ?? 'Unknown plate',
+                            style: const TextStyle(
                               fontSize: 16,
                               color: Color(0xFF69696B),
                             ),
                           ),
                           Row(
-                            children: const [
+                            children: [
                               Text(
-                                'Hassan',
-                                style: TextStyle(
+                                _driver!['name'] ?? 'Unknown',
+                                style: const TextStyle(
                                   fontSize: 16,
                                   color: Color(0xFF919191),
                                 ),
                               ),
-                              SizedBox(width: 4),
-                              Icon(Icons.star, size: 16, color: Colors.amber),
-                              Text('4.5', style: TextStyle(fontSize: 14)),
+                              const SizedBox(width: 4),
+                              const Icon(
+                                Icons.star,
+                                size: 16,
+                                color: Colors.amber,
+                              ),
+                              Text(
+                                (_driver!['rating'] as num?)?.toStringAsFixed(
+                                      1,
+                                    ) ??
+                                    '0.0',
+                                style: const TextStyle(fontSize: 14),
+                              ),
                             ],
                           ),
                         ],
@@ -113,10 +184,13 @@ class DriverInfo extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed:
+                          () => launchUrlString(
+                            "tel://${_driver!['phone_number']}",
+                          ),
                       style: ElevatedButton.styleFrom(
                         shape: const CircleBorder(),
-                        backgroundColor: Colors.grey[200],
+                        backgroundColor: Colors.white,
                         padding: const EdgeInsets.all(12),
                       ),
                       child: const Icon(Icons.call, color: Color(0xFF6A42C2)),
@@ -124,97 +198,64 @@ class DriverInfo extends StatelessWidget {
                     const SizedBox(width: 8),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MyChat(),
-                          ),
-                        );
+                        Get.toNamed('/my_chat');
                       },
                       style: ElevatedButton.styleFrom(
                         shape: const CircleBorder(),
-                        backgroundColor: Colors.grey[200],
+                        backgroundColor: Colors.white,
                         padding: const EdgeInsets.all(12),
                       ),
-                      child: const Icon(Icons.message, color: Color(0xFF6A42C2)),
+                      child: const Icon(
+                        Icons.message,
+                        color: Color(0xFF6A42C2),
+                      ),
                     ),
                   ],
                 ),
 
+                // Rest of your UI continues...
                 const SizedBox(height: 16),
                 const Divider(),
-
-                // Route section
                 const SizedBox(height: 8),
                 const Text(
                   'My route',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
                 ),
-                const SizedBox(height: 8),
                 const ListTile(
                   leading: Icon(Icons.location_on, color: Color(0xFF6A42C2)),
                   title: Text(
                     'Wadi Makkah Company',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFF69696B),
-                    ),
+                    style: TextStyle(fontSize: 20, color: Color(0xFF69696B)),
                   ),
                 ),
                 const ListTile(
                   leading: Icon(Icons.add, color: Color(0xFF6A42C2)),
                   title: Text(
                     'Add stop',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFF919191),
-                    ),
+                    style: TextStyle(fontSize: 20, color: Color(0xFF919191)),
                   ),
                 ),
                 const ListTile(
                   leading: Icon(Icons.place, color: Color(0xFF6A42C2)),
                   title: Text(
                     'Masjid Al-Haram',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFF69696B),
-                    ),
+                    style: TextStyle(fontSize: 20, color: Color(0xFF69696B)),
                   ),
                 ),
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MyChat(),
-                        ),
-                      );
-                    },
+                    onPressed: () {},
                     child: const Text(
                       'Edit destinations',
                       style: TextStyle(color: Color(0xFF6A42C2)),
                     ),
                   ),
                 ),
-
                 const Divider(),
-
-                // Payment section
-                const SizedBox(height: 8),
                 const Text(
                   'Payment method',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 8),
                 Row(
@@ -223,11 +264,7 @@ class DriverInfo extends StatelessWidget {
                     const SizedBox(width: 8),
                     const Text(
                       'cash',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF69696B),
-                      ),
+                      style: TextStyle(fontSize: 20, color: Color(0xFF69696B)),
                     ),
                     const Spacer(),
                     const Text(
@@ -239,59 +276,13 @@ class DriverInfo extends StatelessWidget {
                     ),
                   ],
                 ),
-
                 const Divider(),
-
-                // More section
                 const Text(
                   'More',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => const CancelRidePopup(),
-                            );
-                          },
-                          icon: const Icon(
-                            Icons.cancel,
-                            color: Color(0xFF6A42C2),
-                          ),
-                        ),
-                        const Text('Cancel ride'),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const MyChat(),
-                              ),
-                            );
-                          },
-                          icon: const Icon(
-                            Icons.share,
-                            color: Color(0xFF6A42C2),
-                          ),
-                        ),
-                        const Text('Share ride details'),
-                      ],
-                    ),
-                  ],
-                ),
+                const Center(child: CancelRideAvatar()),
               ],
             ),
           ),

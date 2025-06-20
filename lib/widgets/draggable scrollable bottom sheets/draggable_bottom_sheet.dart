@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:masaar/views/arrive_to_pickup.dart';
-import 'package:masaar/widgets/popups/cancel_ride_popup.dart';
+import 'package:get/get.dart';
+import 'package:masaar/widgets/custom%20widgets/cancel_ride_avatar.dart';
 
 class DraggableBottomSheet extends StatefulWidget {
   const DraggableBottomSheet({super.key});
@@ -27,11 +27,8 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet>
       if (controller.value >= 1.0) {
         setState(() {
           _currentPage++;
-          if (_currentPage > 2) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ArriveToPickup()),
-            );
+          if (_currentPage == 2) {
+            Get.toNamed('/ride_simulation');
           }
           // Restart the animation for cases that use the progress bar
           if (_currentPage != 2) {
@@ -133,33 +130,7 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet>
           value: controller.value,
         ),
         const SizedBox(height: 24),
-        InkWell(
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (context) => CancelRidePopup(),
-            );
-          },
-          child: Column(
-            children: [
-              CircleAvatar(
-                backgroundColor: Color(0xFFF2F2F2),
-                radius: 30,
-                child: Image.asset(
-                  'images/cancel-ride.png',
-                  width: 30,
-                  height: 30,
-                  color: Color(0xFF6A42C2),
-                ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                "Cancel ride",
-                style: TextStyle(fontSize: 16, color: Color(0xFF919191)),
-              ),
-            ],
-          ),
-        ),
+        CancelRideAvatar(),
         const SizedBox(height: 16),
       ],
     );

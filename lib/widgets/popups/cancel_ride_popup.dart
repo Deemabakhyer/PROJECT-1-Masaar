@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:masaar/widgets/custom%20widgets/custom_button.dart';
 import 'package:masaar/widgets/custom%20widgets/custom_outlined_button.dart';
 
@@ -28,7 +29,7 @@ class _CancelRidePopupState extends State<CancelRidePopup> {
               child: IconButton(
                 icon: const Icon(Icons.close),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  Get.back();
                 },
               ),
             ),
@@ -61,7 +62,7 @@ class _CancelRidePopupState extends State<CancelRidePopup> {
                 CustomOutlinedButton(
                   text: 'Keep My Ride',
                   onPressed: () {
-                    Navigator.of(context).pop(); // Close dialog
+                    Get.back();
                   },
                 ),
                 const SizedBox(height: 10),
@@ -159,7 +160,7 @@ class _CancelRidePopupState extends State<CancelRidePopup> {
                                     CustomOutlinedButton(
                                       text: 'Go Back',
                                       onPressed: () {
-                                        Navigator.of(context).pop();
+                                        Get.back();
                                       },
                                     ),
                                     const SizedBox(height: 10),
@@ -192,9 +193,7 @@ class _CancelRidePopupState extends State<CancelRidePopup> {
                                                           Icons.close,
                                                         ),
                                                         onPressed: () {
-                                                          Navigator.of(
-                                                            context,
-                                                          ).pop();
+                                                          Get.back();
                                                         },
                                                       ),
                                                     ),
@@ -231,9 +230,7 @@ class _CancelRidePopupState extends State<CancelRidePopup> {
                                                       text: 'Back to Home',
                                                       isActive: true,
                                                       onPressed: () {
-                                                        Navigator.of(
-                                                          context,
-                                                        ).pop();
+                                                        Get.back();
                                                       },
                                                     ),
                                                   ],

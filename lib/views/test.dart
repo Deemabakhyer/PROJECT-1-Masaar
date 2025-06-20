@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:masaar/widgets/draggable%20scrollable%20bottom%20sheets/driver_info_sheet.dart';
-import 'package:masaar/views/map.dart';
+import 'package:masaar/widgets/popups/submit_rating_popup.dart';
 
 class Test extends StatelessWidget {
   const Test({super.key});
@@ -8,7 +7,7 @@ class Test extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Map()
-    ) ;
+      body: SubmitRating(driverID: 2,)
+    );
   }
 }
