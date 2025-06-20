@@ -44,7 +44,10 @@ class _CustomButtonState extends State<CustomButton> {
       child: ElevatedButton(
         onPressed: widget.onPressed, //important with clicking
         style: ElevatedButton.styleFrom(
-          minimumSize: const Size(374, 60), // the Width and Height of the button
+          minimumSize: const Size(
+            374,
+            60,
+          ), // the Width and Height of the button
           backgroundColor: const Color(0xFF6A42C2), // button color
 
           foregroundColor: Colors.white, //text color

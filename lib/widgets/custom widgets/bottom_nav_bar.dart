@@ -1,20 +1,6 @@
 import 'package:flutter/material.dart';
-// import 'package:masaar/views/home_page.dart';
+import 'package:masaar/views/ride%20booking%20views/home_page.dart';
 
-// Main App
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: BottomNavBar(),
-    );
-  }
-}
-
-// BottomNavBar Scaffold
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
 
@@ -27,7 +13,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   final List<Widget> _pages = const [
     // put your pages here
-    // HomePage(),
+    HomePage(),
     // Ridepage(),
     // AccountPage(),
   ];
@@ -94,6 +80,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
             );
           }),
         ),
+        
       ),
     );
   }

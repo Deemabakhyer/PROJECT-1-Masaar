@@ -14,6 +14,8 @@
             android:value="AIzaSyAZFxQXdretZtaviMcwu8nFLHyT7DI1kNg" />
 
         <activity
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
