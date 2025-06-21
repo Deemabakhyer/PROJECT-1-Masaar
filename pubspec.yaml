@@ -36,23 +36,25 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_map: ^8.1.1
   latlong2: ^0.9.1
-  geocoding: ^2.1.0
+  get: ^4.7.2
+  geolocator: ^14.0.1
+  geocoding: ^4.0.0
   ionicons: ^0.2.2
-  dropdown_button2: ^2.3.9
-  moyasar: ^2.0.18
-  http: ^1.4.0
-  smooth_page_indicator: ^1.2.1
-  shared_preferences: ^2.2.0
   supabase_flutter: ^2.9.1
+  smooth_page_indicator: ^1.2.1
+  flutter_svg: ^2.1.0
+  moyasar: ^2.0.19
   webview_flutter: ^4.13.0
-  geolocator: ^14.0.0
+  image_picker: ^1.1.2
+  dropdown_button2: ^2.3.9
+  http: ^1.4.0
+  shared_preferences: ^2.2.0
   flutter_chat_ui: ^2.3.1
   google_maps_flutter: ^2.12.2
   duration: ^4.0.3
-  intl: ^0.20.2
+  intl: 0.19.0
   flutter_chat_core: ^2.4.0
   permission_handler: ^12.0.0+1
-  get: ^4.7.2
   url_launcher: ^6.3.1
 
 dev_dependencies:
@@ -79,6 +81,27 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - images\cancelled_car.png
+    - images\car.png
+    - images\SAR.png
+    - images\profile_placeholder.png
+    - images\user.png
+    - images\earth.png
+    - images\location.png
+    - images\wallet.png
+    - images\logout.png
+    - images\logo.png
+    - images\delete.png
+    - images\back_button.png
+    - images\profile_upload.png
+    - images\auth.png
+    - images\oboarding1.svg
+    - images\oboarding2.svg
+    - images\oboarding3.svg
+    - images\oboarding4.svg
+    - images\WhiteSAR.png
+    - images\visa.png
+
     - images/
     - images/cash.png
     - images/applePay.png

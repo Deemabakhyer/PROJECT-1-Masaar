@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:masaar/models/place.dart';
 
-class CustomSearchBar2 extends StatefulWidget {
-  const CustomSearchBar2({
+class CustomSearchBar extends StatefulWidget {
+  const CustomSearchBar({
     super.key,
     required this.leadingIcon,
     required this.hintText,
@@ -21,10 +21,10 @@ class CustomSearchBar2 extends StatefulWidget {
   final Function(dynamic value) onSubmitted;
 
   @override
-  State<CustomSearchBar2> createState() => _CustomSearchBar2State();
+  State<CustomSearchBar> createState() => _CustomSearchBarState();
 }
 
-class _CustomSearchBar2State extends State<CustomSearchBar2> {
+class _CustomSearchBarState extends State<CustomSearchBar> {
   final FocusNode focusNode = FocusNode();
   final SearchController searchController = SearchController();
 

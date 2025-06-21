@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:masaar/views/ride%20booking/home_page.dart';
+import 'package:masaar/views/Account/account_page.dart';
+import 'package:masaar/views/Home/home_page.dart' as home;
+import 'package:masaar/views/Rides/ride_logs_views.dart';
+
+// BottomNavBar Scaffold
+import 'package:masaar/views/ride%20booking/home_page.dart' as booking;
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
@@ -11,11 +16,11 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = const [
+  final List<Widget> _pages = [
     // put your pages here
-    HomePage(),
-    // Ridepage(),
-    // AccountPage(),
+    home.HomePage(),
+    RideLogsView(),
+    AccountPage(),
   ];
 
   final List<Map<String, dynamic>> _navItems = [
@@ -80,7 +85,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
             );
           }),
         ),
-        
       ),
     );
   }
