@@ -142,10 +142,14 @@ class _ActiveCardsState extends State<ActiveCards> {
             minimumSize: Size.zero,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
-          child: SizedBox(
-            height: 50,
-            width: 50,
-            child: Image.asset('images/back_button.png'),
+          child: CircleAvatar(
+            backgroundColor: const Color(0xFF6A42C2),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                Get.back();
+              },
+            ),
           ),
         ),
 
