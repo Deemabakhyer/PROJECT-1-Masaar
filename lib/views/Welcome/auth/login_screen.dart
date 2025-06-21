@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:masaar/main.dart';
 import 'package:masaar/views/Welcome/auth/otp_screen.dart';
-import 'package:masaar/views/Welcome/auth/sign_up_screen.dart';
+import 'package:masaar/views/Welcome/auth/sign_up_screen.dart' hide supabase;
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginScreen extends StatefulWidget {

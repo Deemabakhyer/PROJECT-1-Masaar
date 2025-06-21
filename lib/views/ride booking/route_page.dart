@@ -48,7 +48,7 @@ class _RoutePageState extends State<RoutePage> {
                       }
                       return KeyEventResult.ignored;
                     },
-                    child: CustomSearchBar2(
+                    child: CustomSearchBar(
                       controller: pickupController,
                       leadingIcon: const Icon(Ionicons.search),
                       hintText: "Select Route",
@@ -100,7 +100,7 @@ class _RoutePageState extends State<RoutePage> {
                       }
                       return KeyEventResult.ignored;
                     },
-                    child: CustomSearchBar2(
+                    child: CustomSearchBar(
                       controller: destinationController,
                       leadingIcon: const Icon(Ionicons.search),
                       hintText: "Select Destination",

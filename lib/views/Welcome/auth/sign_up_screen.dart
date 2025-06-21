@@ -4,6 +4,8 @@ import 'package:masaar/views/Welcome/auth/otp_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'otp_screen.dart';
 
+final supabase = Supabase.instance.client;
+
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
