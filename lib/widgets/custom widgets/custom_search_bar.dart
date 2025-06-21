@@ -78,6 +78,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
               controller.openView();
             },
             onSubmitted: (value) {
+              // ignore: avoid_print
               print('Submitted: $value');
               controller.closeView(value);
               // Optionally, perform a navigation or update UI based on the value

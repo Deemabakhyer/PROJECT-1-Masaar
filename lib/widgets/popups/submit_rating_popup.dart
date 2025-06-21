@@ -54,7 +54,6 @@ class _SubmitRatingState extends State<SubmitRating> {
   _submitRating() async {
     final supabase = Supabase.instance.client;
     final newRating = _rating.toDouble();
-    print(widget.driverID);
 
     try {
       final response =
