@@ -3,7 +3,10 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+<<<<<<< HEAD
   file_selector_linux
+=======
+>>>>>>> origin/main
   gtk
   url_launcher_linux
 )

@@ -4,6 +4,8 @@ import 'package:masaar/views/Home/home_page.dart';
 import 'package:masaar/views/Rides/ride_logs_views.dart';
 
 // BottomNavBar Scaffold
+import 'package:masaar/views/ride%20booking/home_page.dart';
+
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
 

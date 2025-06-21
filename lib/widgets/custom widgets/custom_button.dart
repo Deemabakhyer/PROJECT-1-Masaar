@@ -64,7 +64,7 @@ class _CustomButtonState extends State<CustomButton> {
             if (states.contains(WidgetState.pressed)) {
               return const Color(
                 0xFF563B9C,
-              ).withOpacity(0.2); // darker when pressed
+              ).withValues(alpha: 0.2); // darker when pressed
             }
             return null;
           }),
