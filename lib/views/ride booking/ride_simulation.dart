@@ -17,7 +17,7 @@ class RideSimulation extends StatefulWidget {
 }
 
 class _RideSimulationState extends State<RideSimulation> {
-  final LocationController locationController = Get.put(LocationController());
+final LocationController locationController = Get.find<LocationController>();
   Map<String, dynamic>? _driver;
   int? driverID;
   @override

@@ -247,7 +247,7 @@ class _SubmitRatingState extends State<SubmitRating> {
               text: 'Return to home',
               isActive: true,
               onPressed: () {
-                Get.toNamed('/Home');
+                Get.toNamed('/StartupScreen');
               },
             ),
           ],

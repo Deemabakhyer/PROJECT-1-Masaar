@@ -231,7 +231,7 @@ class _CancelRidePopupState extends State<CancelRidePopup> {
                                                       text: 'Back to Home',
                                                       isActive: true,
                                                       onPressed: () {
-                                                        Get.toNamed('/Home');
+                                                        Get.toNamed('/StartupScreen');
                                                       },
                                                     ),
                                                   ],

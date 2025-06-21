@@ -162,7 +162,7 @@ class _OtpScreenState extends State<OtpScreen> {
               const SizedBox(height: 8),
               // Subtitle
               Text(
-                'An SMS OTP was sent to: ${widget.email}',
+                'OTP was sent to: ${widget.email}',
                 style: const TextStyle(
                   fontSize: 14,
                   color: Color(0xFF919191),

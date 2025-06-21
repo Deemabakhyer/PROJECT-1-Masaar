@@ -267,9 +267,10 @@ class _RideDetailsState extends State<RideDetails> {
                   'My route',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
                 ),
+                const SizedBox(height: 8),
                 Row(
                   children: [
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 12),
                     Icon(Icons.location_on, color: const Color(0xFF6A42C2)),
                     const SizedBox(width: 8),
                     Obx(
@@ -277,56 +278,51 @@ class _RideDetailsState extends State<RideDetails> {
                         locationController.currentAddress.value.isEmpty
                             ? " "
                             : locationController.currentAddress.value,
-                        style: const TextStyle(fontWeight: FontWeight.w500),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20,
+                          color: Color(0xFF69696B),
+                        ),
                       ),
                     ),
                   ],
                 ),
+                const ListTile(
+                  leading: Icon(Icons.add, color: Color(0xFF6A42C2)),
+                  title: Text(
+                    'Add stop',
+                    style: TextStyle(fontSize: 20, color: Color(0xFF919191)),
+                  ),
+                ),
                 Row(
                   children: [
+                    const SizedBox(width: 12),
+                    Icon(Icons.place_outlined, color: const Color(0xFF6A42C2)),
                     const SizedBox(width: 8),
-                    Icon(Icons.place, color: Color(0xFF6A42C2)),
                     Obx(
                       () => Text(
                         locationController.destinationAddress.value.isEmpty
                             ? " "
                             : locationController.destinationAddress.value,
-                        style: const TextStyle(fontWeight: FontWeight.w500),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20,
+                          color: Color(0xFF69696B),
+                        ),
                       ),
                     ),
                   ],
                 ),
-                // const ListTile(
-                //   leading: Icon(Icons.location_on, color: Color(0xFF6A42C2)),
-                //   title: Text(
-                //     'Wadi Makkah Company',
-                //     style: TextStyle(fontSize: 20, color: Color(0xFF69696B)),
-                //   ),
-                // ),
-                // const ListTile(
-                //   leading: Icon(Icons.add, color: Color(0xFF6A42C2)),
-                //   title: Text(
-                //     'Add stop',
-                //     style: TextStyle(fontSize: 20, color: Color(0xFF919191)),
-                //   ),
-                // ),
-                // const ListTile(
-                //   leading: Icon(Icons.place, color: Color(0xFF6A42C2)),
-                //   title: Text(
-                //     'Masjid Al-Haram',
-                //     style: TextStyle(fontSize: 20, color: Color(0xFF69696B)),
-                //   ),
-                // ),
-                // Align(
-                //   alignment: Alignment.centerRight,
-                //   child: TextButton(
-                //     onPressed: () {},
-                //     child: const Text(
-                //       'Edit destinations',
-                //       style: TextStyle(color: Color(0xFF6A42C2)),
-                //     ),
-                //   ),
-                // ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      'Edit destinations',
+                      style: TextStyle(color: Color(0xFF6A42C2)),
+                    ),
+                  ),
+                ),
                 const Divider(),
                 const Text(
                   'Payment method',
@@ -335,19 +331,24 @@ class _RideDetailsState extends State<RideDetails> {
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    Image.asset('images/cash.png', width: 56, height: 41),
+                    Image.asset('images/creditCard.png', width: 56, height: 41),
                     const SizedBox(width: 8),
                     const Text(
-                      'cash',
+                      'Credit Card',
                       style: TextStyle(fontSize: 20, color: Color(0xFF69696B)),
                     ),
                     const Spacer(),
                     const Text(
-                      '48 ﷼',
+                      '48',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
+                    ),
+                    Image.asset(
+                      'images/SAR.png',
+                      width: 24,
+                      height: 24,
                     ),
                   ],
                 ),
