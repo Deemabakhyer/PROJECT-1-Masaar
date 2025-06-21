@@ -2,6 +2,8 @@
 
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:masaar/controllers/location_controller.dart';
 import 'package:masaar/views/ride%20booking/my_map.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:masaar/widgets/bottom%20sheets/ride_details.dart';
@@ -15,12 +17,17 @@ class RideSimulation extends StatefulWidget {
 }
 
 class _RideSimulationState extends State<RideSimulation> {
+  final LocationController locationController = Get.put(LocationController());
   Map<String, dynamic>? _driver;
   int? driverID;
   @override
   void initState() {
     super.initState();
-    fetchClosestDriver(LatLng(21.324716237626838, 39.959200490595784));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    fetchClosestDriver(
+      locationController.pickupLocation.value is LatLng
+          ? locationController.pickupLocation.value as LatLng
+          : LatLng(21.324716237626838, 39.959200490595784),
+    );
   }
 
   void fetchClosestDriver(LatLng? pickupLocation) async {
@@ -30,7 +37,7 @@ class _RideSimulationState extends State<RideSimulation> {
     final response = await supabase
         .from('drivers')
         .select('driver_id, latitude, longitude');
-        print(response);
+    print(response);
     if (response.isEmpty) {
       print("No drivers found.");
       return;
@@ -108,8 +115,14 @@ class _RideSimulationState extends State<RideSimulation> {
       body: Stack(
         children: [
           MyMap(
-            pickupLocation: LatLng(21.324716237626838, 39.959200490595784),
-            destinationLocation: LatLng(21.360190460922826, 39.90474913662535),
+            pickupLocation:
+                locationController.pickupLocation.value is LatLng
+                    ? locationController.pickupLocation.value as LatLng
+                    : LatLng(21.324716237626838, 39.959200490595784),
+            destinationLocation:
+                locationController.destinationLocation.value is LatLng
+                    ? locationController.destinationLocation.value as LatLng
+                    : LatLng(21.360190460922826, 39.90474913662535),
             driverID: driverID!,
             driverLocation: LatLng(
               _driver!['latitude'] as double,
@@ -117,10 +130,7 @@ class _RideSimulationState extends State<RideSimulation> {
             ),
             simulateRoute: true,
           ),
-          RideDetails(
-            state: 'Your journey has\n started',
-            driverID: driverID!,
-          ),
+          RideDetails(state: 'Your journey has\n started', driverID: driverID!),
         ],
       ),
     );

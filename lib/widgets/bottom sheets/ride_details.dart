@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:masaar/controllers/location_controller.dart';
 import 'package:masaar/widgets/custom%20widgets/cancel_ride_button.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -17,6 +18,7 @@ class RideDetails extends StatefulWidget {
 }
 
 class _RideDetailsState extends State<RideDetails> {
+  final LocationController locationController = Get.put(LocationController());
   final user = Supabase.instance.client.auth.currentUser;
   late final int customerID;
   Map<String, dynamic>? _driver;
@@ -265,37 +267,66 @@ class _RideDetailsState extends State<RideDetails> {
                   'My route',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
                 ),
-                const ListTile(
-                  leading: Icon(Icons.location_on, color: Color(0xFF6A42C2)),
-                  title: Text(
-                    'Wadi Makkah Company',
-                    style: TextStyle(fontSize: 20, color: Color(0xFF69696B)),
-                  ),
-                ),
-                const ListTile(
-                  leading: Icon(Icons.add, color: Color(0xFF6A42C2)),
-                  title: Text(
-                    'Add stop',
-                    style: TextStyle(fontSize: 20, color: Color(0xFF919191)),
-                  ),
-                ),
-                const ListTile(
-                  leading: Icon(Icons.place, color: Color(0xFF6A42C2)),
-                  title: Text(
-                    'Masjid Al-Haram',
-                    style: TextStyle(fontSize: 20, color: Color(0xFF69696B)),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      'Edit destinations',
-                      style: TextStyle(color: Color(0xFF6A42C2)),
+                Row(
+                  children: [
+                    const SizedBox(width: 8),
+                    Icon(Icons.location_on, color: const Color(0xFF6A42C2)),
+                    const SizedBox(width: 8),
+                    Obx(
+                      () => Text(
+                        locationController.currentAddress.value.isEmpty
+                            ? " "
+                            : locationController.currentAddress.value,
+                        style: const TextStyle(fontWeight: FontWeight.w500),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
+                Row(
+                  children: [
+                    const SizedBox(width: 8),
+                    Icon(Icons.place, color: Color(0xFF6A42C2)),
+                    Obx(
+                      () => Text(
+                        locationController.destinationAddress.value.isEmpty
+                            ? " "
+                            : locationController.destinationAddress.value,
+                        style: const TextStyle(fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ],
+                ),
+                // const ListTile(
+                //   leading: Icon(Icons.location_on, color: Color(0xFF6A42C2)),
+                //   title: Text(
+                //     'Wadi Makkah Company',
+                //     style: TextStyle(fontSize: 20, color: Color(0xFF69696B)),
+                //   ),
+                // ),
+                // const ListTile(
+                //   leading: Icon(Icons.add, color: Color(0xFF6A42C2)),
+                //   title: Text(
+                //     'Add stop',
+                //     style: TextStyle(fontSize: 20, color: Color(0xFF919191)),
+                //   ),
+                // ),
+                // const ListTile(
+                //   leading: Icon(Icons.place, color: Color(0xFF6A42C2)),
+                //   title: Text(
+                //     'Masjid Al-Haram',
+                //     style: TextStyle(fontSize: 20, color: Color(0xFF69696B)),
+                //   ),
+                // ),
+                // Align(
+                //   alignment: Alignment.centerRight,
+                //   child: TextButton(
+                //     onPressed: () {},
+                //     child: const Text(
+                //       'Edit destinations',
+                //       style: TextStyle(color: Color(0xFF6A42C2)),
+                //     ),
+                //   ),
+                // ),
                 const Divider(),
                 const Text(
                   'Payment method',
