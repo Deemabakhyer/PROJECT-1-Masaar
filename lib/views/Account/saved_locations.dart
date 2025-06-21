@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api, deprecated_member_use, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:masaar/widgets/custom%20widgets/custom_button.dart';
@@ -170,6 +172,7 @@ class _SavedLocationsPageState extends State<SavedLocationsPage> {
     required IconData icon,
     required String title,
     required String subtitle,
+    // ignore: unused_element_parameter
     Color? iconColor,
     VoidCallback? onTap,
   }) {

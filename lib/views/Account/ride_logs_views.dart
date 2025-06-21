@@ -130,6 +130,7 @@ class _RideLogsViewState extends State<RideLogsView> {
                           time: ride.time,
                         ),
                       )
+                      // ignore: unnecessary_to_list_in_spreads
                       .toList(),
                 ],
               );

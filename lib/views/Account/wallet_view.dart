@@ -1,7 +1,9 @@
+// ignore_for_file: deprecated_member_use, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:masaar/models/card_model.dart';
-import 'package:masaar/views/Account/add_new_card.dart';
+import 'package:masaar/views/account/add_new_card.dart';
 import 'package:masaar/widgets/custom%20widgets/custom_button.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -10,6 +12,7 @@ class WalletView extends StatefulWidget {
   final String firstName;
   final String lastName;
 
+  // ignore: use_super_parameters
   const WalletView({Key? key, required this.firstName, required this.lastName})
     : super(key: key);
 
@@ -225,7 +228,7 @@ class _WalletViewState extends State<WalletView> {
                                           ),
                                         ),
                                         Text(
-                                          'Exp ${card.expiryMonth ?? ''}/${card.expiryYear ?? ''}',
+                                          'Exp ${card.expiryMonth}/${card.expiryYear}',
                                           style: const TextStyle(
                                             color: Colors.white70,
                                             fontSize: 14,

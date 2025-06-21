@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:masaar/views/Account/account_page.dart';
-import 'package:masaar/views/Home/home_page.dart' as home;
-import 'package:masaar/views/Rides/ride_logs_views.dart';
-
-// BottomNavBar Scaffold
-import 'package:masaar/views/ride%20booking/home_page.dart' as booking;
+import 'package:masaar/views/account/account_page.dart';
+import 'package:masaar/views/account/ride_logs_views.dart';
+import 'package:masaar/views/ride%20booking/home_page.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
@@ -18,7 +15,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   final List<Widget> _pages = [
     // put your pages here
-    home.HomePage(),
+    HomePage(),
     RideLogsView(),
     AccountPage(),
   ];

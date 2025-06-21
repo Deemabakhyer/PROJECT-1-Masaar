@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:masaar/controllers/auth_controller.dart';
@@ -7,6 +9,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class AddNewCard extends StatefulWidget {
   final VoidCallback? onCardAdded;
 
+  // ignore: use_super_parameters
   const AddNewCard({Key? key, this.onCardAdded}) : super(key: key);
 
   @override

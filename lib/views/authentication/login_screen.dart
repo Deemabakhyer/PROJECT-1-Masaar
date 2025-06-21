@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:masaar/main.dart';
-import 'package:masaar/views/Welcome/auth/otp_screen.dart';
-import 'package:masaar/views/Welcome/auth/sign_up_screen.dart' hide supabase;
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:masaar/views/authentication/otp_screen.dart';
+import 'package:masaar/views/authentication/sign_up_screen.dart' hide supabase;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -172,6 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       OtpScreen(email: email, isNewUser: false),
                                 );
                               } catch (e) {
+                                // ignore: use_build_context_synchronously
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(

@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class AddLocationPage extends StatefulWidget {
   final Map<String, dynamic>? initialData;
 
+  // ignore: use_super_parameters
   const AddLocationPage({Key? key, this.initialData}) : super(key: key);
 
   @override
@@ -66,6 +67,7 @@ class AddLocationPageState extends State<AddLocationPage> {
             'created_at': DateTime.now().toIso8601String(),
           }).select();
 
+      // ignore: unnecessary_null_comparison
       if (response == null || response.isEmpty) {
         _showErrorDialog('Failed to add location.');
       } else {

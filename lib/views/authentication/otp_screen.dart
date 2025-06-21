@@ -1,6 +1,7 @@
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
-import 'package:masaar/views/Home/home_page.dart';
-import 'package:masaar/views/Welcome/auth/login_screen.dart';
+import 'package:masaar/views/authentication/login_screen.dart';
 import 'package:masaar/widgets/custom%20widgets/bottom_nav_bar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -8,6 +9,7 @@ class OtpScreen extends StatefulWidget {
   final String email;
   final bool isNewUser;
 
+  // ignore: use_super_parameters
   const OtpScreen({Key? key, required this.email, required this.isNewUser})
     : super(key: key);
 

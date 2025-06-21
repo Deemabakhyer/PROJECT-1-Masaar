@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
-import 'package:masaar/views/Welcome/auth/login_screen.dart';
-import 'package:masaar/views/Welcome/onBoarding/splash_screen.dart';
+import 'package:masaar/views/authentication/login_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthController extends GetxController {
@@ -12,6 +11,7 @@ class AuthController extends GetxController {
     currentUser.value = _supabase.auth.currentUser;
 
     _supabase.auth.onAuthStateChange.listen((data) {
+      // ignore: unused_local_variable
       final event = data.event;
       final session = data.session;
 

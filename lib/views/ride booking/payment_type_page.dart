@@ -431,7 +431,7 @@ Widget walletBalanceCard({
               Row(
                 children: [
                   Image.asset(
-                    'images/saudiriyalsymbol.png',
+                    'images/saudi-riyal-symbol.png',
                     width: 32,
                     height: 32,
                     color: Colors.white,

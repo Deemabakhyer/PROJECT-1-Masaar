@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:masaar/controllers/settings_controllers/account_controller.dart';
+import 'package:masaar/controllers/account_controller.dart';
 import 'package:masaar/controllers/auth_controller.dart';
-import 'package:masaar/views/Account/personal_information.dart';
-import 'package:masaar/views/Account/saved_locations.dart';
-import 'package:masaar/views/Account/wallet_view.dart';
-import 'package:masaar/widgets/settings_widgets/settings_items.dart';
-import 'package:masaar/widgets/settings_widgets/settings_header.dart';
+import 'package:masaar/views/account/personal_information.dart';
+import 'package:masaar/views/account/saved_locations.dart';
+import 'package:masaar/views/account/wallet_view.dart';
+import 'package:masaar/widgets/custom%20widgets/settings_items.dart';
+import 'package:masaar/widgets/custom%20widgets/settings_header.dart';
 
 class AccountPage extends StatelessWidget {
   const AccountPage({super.key});
@@ -21,6 +21,7 @@ class AccountPage extends StatelessWidget {
         child: SafeArea(
           child: Center(
             child: Obx(() {
+              // ignore: unused_local_variable
               final profile = controller.profile.value;
 
               return Column(

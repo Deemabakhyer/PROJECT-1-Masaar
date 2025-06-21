@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:masaar/controllers/settings_controllers/account_controller.dart';
+import 'package:masaar/controllers/account_controller.dart';
 import 'package:masaar/widgets/custom%20widgets/custom_button.dart';
 
 class PersonalInformation extends StatelessWidget {
+  // ignore: use_super_parameters
   PersonalInformation({Key? key}) : super(key: key);
 
   final AccountController accountController = Get.put(AccountController());

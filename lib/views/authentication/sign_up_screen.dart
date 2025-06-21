@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:masaar/main.dart';
-import 'package:masaar/views/Welcome/auth/otp_screen.dart';
+import 'package:masaar/views/authentication/otp_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'otp_screen.dart';
 
 final supabase = Supabase.instance.client;
 
@@ -620,6 +618,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         lastName.isEmpty ||
         password.isEmpty ||
         email.isEmpty)
+      // ignore: curly_braces_in_flow_control_structures
       return;
 
     try {
@@ -639,6 +638,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         'customer_id': response.user!.id,
       });
 
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => OtpScreen(email: email, isNewUser: true),
