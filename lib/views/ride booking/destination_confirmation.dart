@@ -4,40 +4,35 @@ import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:masaar/controllers/location_controller.dart';
-import 'package:masaar/widgets/custom_button.dart';
+import 'package:masaar/widgets/custom%20widgets/custom_button.dart';
 
-class Routeconfirmation extends StatefulWidget {
-  const Routeconfirmation({super.key});
+class Destinationconfirmation extends StatefulWidget {
+  const Destinationconfirmation({super.key});
 
   @override
-  State<Routeconfirmation> createState() => _RouteconfirmationState();
+  State<Destinationconfirmation> createState() =>
+      _DestinationconfirmationState();
 }
 
-class _RouteconfirmationState extends State<Routeconfirmation> {
+class _DestinationconfirmationState extends State<Destinationconfirmation> {
   final MapController _mapController = MapController();
   final locationController = Get.put(LocationController());
 
   LatLng? selectedPoint;
   String selectedAddress = '';
+
   @override
   void initState() {
     super.initState();
 
     Future.delayed(Duration.zero, () {
-      final fromArgs = Get.arguments?['pickup'] as LatLng?;
-      if (fromArgs != null) {
-        selectedPoint = fromArgs;
-        selectedAddress = locationController.currentAddress.value;
-        _mapController.move(fromArgs, 16);
-        setState(() {});
-      } else {
-        final pickup = locationController.pickupLocation.value;
-        if (pickup != null) {
-          selectedPoint = pickup;
-          selectedAddress = locationController.currentAddress.value;
-          _mapController.move(pickup, 16);
-          setState(() {});
-        }
+      final destination = locationController.destinationLocation.value;
+      if (destination != null) {
+        _mapController.move(destination, 16);
+        setState(() {
+          selectedPoint = destination;
+          selectedAddress = locationController.destinationAddress.value;
+        });
       }
     });
   }
@@ -64,8 +59,8 @@ class _RouteconfirmationState extends State<Routeconfirmation> {
         final address = "${place.name}, ${place.locality}";
         setState(() {
           selectedAddress = address;
-          locationController.pickupAddressController.text = address;
-          locationController.currentAddress.value = address;
+          locationController.destinationAddressController.text = address;
+          locationController.destinationAddress.value = address;
         });
       }
     } catch (e) {
@@ -93,8 +88,8 @@ class _RouteconfirmationState extends State<Routeconfirmation> {
                 userAgentPackageName: 'com.example.app',
               ),
               Obx(() {
-                final pickup =
-                    selectedPoint ?? locationController.pickupLocation.value;
+                final pickup = locationController.pickupLocation.value;
+                // ignore: unused_local_variable
                 final destination =
                     locationController.destinationLocation.value;
                 final currentLocation =
@@ -118,10 +113,29 @@ class _RouteconfirmationState extends State<Routeconfirmation> {
                   );
                 }
 
-                if (pickup != null && destination != null) {
+                final LatLng? destinationMarker =
+                    selectedPoint ??
+                    locationController.destinationLocation.value;
+
+                if (destinationMarker != null) {
+                  markers.add(
+                    Marker(
+                      point: destinationMarker,
+                      width: 40,
+                      height: 40,
+                      child: Image.asset(
+                        "images/des.png",
+                        width: 40,
+                        height: 73,
+                      ),
+                    ),
+                  );
+                }
+
+                if (pickup != null && destinationMarker != null) {
                   polylines.add(
                     Polyline(
-                      points: [pickup, destination],
+                      points: [pickup, destinationMarker],
                       color: const Color(0xFF6A42C2),
                       strokeWidth: 4,
                     ),
@@ -194,7 +208,7 @@ class _RouteconfirmationState extends State<Routeconfirmation> {
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
+                                color: Colors.black.withValues(alpha: 0.2),
                                 blurRadius: 8,
                                 offset: const Offset(0, 3),
                               ),
@@ -214,7 +228,6 @@ class _RouteconfirmationState extends State<Routeconfirmation> {
             ],
           ),
 
-          
           Positioned(
             top: 50,
             left: 16,
@@ -263,7 +276,7 @@ class _RouteconfirmationState extends State<Routeconfirmation> {
                       ),
                     ),
                     Text(
-                      selectedAddress.isEmpty ? " " : selectedAddress,
+                      selectedAddress.isEmpty ? "" : selectedAddress,
                       style: const TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 28,
@@ -276,10 +289,22 @@ class _RouteconfirmationState extends State<Routeconfirmation> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 20),
                       child: CustomButton(
-                        text: "Confirm Pickup",
+                        text: "Confirm Destination",
                         isActive: true,
                         onPressed: () {
-                          Get.toNamed('/route');
+                          if (selectedPoint != null) {
+                            locationController.destinationLocation.value =
+                                selectedPoint!;
+                            Get.toNamed('/package_type');
+                          } else {
+                            Get.snackbar(
+                              "Select a location",
+                              "Please tap on the map to select a destination.",
+                              backgroundColor: Colors.white,
+                              colorText: Colors.black,
+                              snackPosition: SnackPosition.BOTTOM,
+                            );
+                          }
                         },
                       ),
                     ),

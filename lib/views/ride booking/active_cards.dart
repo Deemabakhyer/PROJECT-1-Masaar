@@ -1,8 +1,10 @@
+// ignore_for_file: use_super_parameters, avoid_print, deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:masaar/models/card_model.dart';
-import 'package:masaar/views/Home_views/payment_redirect_view.dart';
-import 'package:masaar/widgets/custom_button.dart';
+import 'payment_redirect_view.dart';
+import 'package:masaar/widgets/custom widgets/custom_button.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:moyasar/moyasar.dart';
@@ -110,12 +112,8 @@ class _ActiveCardsState extends State<ActiveCards> {
       final transactionUrl =
           (result.source as CardPaymentResponseSource).transactionUrl;
 
-      if (transactionUrl != null) {
-        // Open the transactionUrl in a WebView or browser
-        Get.to(() => PaymentRedirectView(url: transactionUrl));
-      } else {
-        print('No transaction URL found');
-      }
+      // Open the transactionUrl in a WebView or browser
+      Get.to(() => PaymentRedirectView(url: transactionUrl));
     } else {
       print('Unknown result type');
     }

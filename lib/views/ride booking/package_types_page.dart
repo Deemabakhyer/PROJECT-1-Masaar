@@ -1,23 +1,27 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:masaar/controllers/location_controller.dart';
-import 'package:masaar/widgets/custom_button.dart';
+import 'package:masaar/widgets/custom%20widgets/custom_button.dart';
+import 'package:masaar/widgets/custom%20widgets/custom_car_option.dart';
 
-class PaymentTypePage extends StatefulWidget {
-  const PaymentTypePage({super.key});
+class PackageTypesPage extends StatefulWidget {
+  const PackageTypesPage({super.key});
 
   @override
-  State<PaymentTypePage> createState() => _PaymentTypePageState();
+  State<PackageTypesPage> createState() => _PackageTypesPageState();
 }
 
-class _PaymentTypePageState extends State<PaymentTypePage> {
+class _PackageTypesPageState extends State<PackageTypesPage> {
   final MapController _mapController = MapController();
-  final locationController = Get.find<LocationController>();
+  final locationController = Get.put(LocationController());
+  final selectedCarOption = ValueNotifier<String?>(null);
 
-  String selectedMethod = 'Cash';
-  int walletBalance = 0;
+  final List<String> items = ['Cash', 'Apple Pay', 'Credit/Debit Card'];
+  final valueListenable = ValueNotifier<String?>(null);
   LatLng? selectedPoint;
   String selectedAddress = '';
 
@@ -68,11 +72,7 @@ class _PaymentTypePageState extends State<PaymentTypePage> {
                       point: pickup,
                       width: 40,
                       height: 40,
-                      child: Image.asset(
-                        'images/pickup.png',
-                        width: 40,
-                        height: 40,
-                      ),
+                      child: Image.asset('images/pickup.png'),
                     ),
                   );
                 }
@@ -83,11 +83,7 @@ class _PaymentTypePageState extends State<PaymentTypePage> {
                       point: destination,
                       width: 40,
                       height: 40,
-                      child: Image.asset(
-                        'images/des.png',
-                        width: 40,
-                        height: 40,
-                      ),
+                      child: Image.asset('images/des.png'),
                     ),
                   );
                 }
@@ -156,7 +152,7 @@ class _PaymentTypePageState extends State<PaymentTypePage> {
                     MarkerLayer(markers: markers),
                     // LOCATION BUTTON
                     Positioned(
-                      top: 280,
+                      top: 400,
                       right: 16,
                       child: GestureDetector(
                         onTap: () {
@@ -188,8 +184,7 @@ class _PaymentTypePageState extends State<PaymentTypePage> {
             ],
           ),
 
-         
-        
+   
           Positioned(
             top: 50,
             left: 16,
@@ -203,15 +198,20 @@ class _PaymentTypePageState extends State<PaymentTypePage> {
               ),
             ),
           ),
+         
+          // Bottom Sheet
           Positioned(
-            bottom: 135,
+            bottom: 100,
             left: 0,
             right: 0,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 50),
               decoration: const BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black26,
@@ -222,74 +222,64 @@ class _PaymentTypePageState extends State<PaymentTypePage> {
               ),
               child: SingleChildScrollView(
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(
-                      child: Container(
-                        width: 40,
-                        height: 4,
-                        margin: const EdgeInsets.only(bottom: 16),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[400],
-                          borderRadius: BorderRadius.circular(2),
-                        ),
+                    Container(
+                      width: 40,
+                      height: 4,
+                      margin: const EdgeInsets.only(bottom: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[400],
+                        borderRadius: BorderRadius.circular(2),
                       ),
                     ),
-                    const Text(
-                      "Payment",
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Inter',
-                      ),
+
+                    ValueListenableBuilder<String?>(
+                      valueListenable: selectedCarOption,
+                      builder: (context, selected, _) {
+                        return Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () => selectedCarOption.value = 'Saver',
+                              child: CustomCarOption2(
+                                carOption: 'Saver',
+                                price: '35',
+                                arrivalTime: '9 min',
+                                carImg: 'images/saver-car.png',
+                                capacity: '4',
+                                isSelected: selected == 'Saver',
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () => selectedCarOption.value = 'Comfort',
+                              child: CustomCarOption2(
+                                carOption: 'Comfort',
+                                price: '48',
+                                arrivalTime: '12 min',
+                                carImg: 'images/comfort-car.png',
+                                capacity: '4',
+                                isSelected: selected == 'Comfort',
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () => selectedCarOption.value = 'Family',
+                              child: CustomCarOption2(
+                                carOption: 'Family',
+                                price: '86',
+                                arrivalTime: '12 min',
+                                carImg: 'images/family-car.png',
+                                capacity: '7',
+                                isSelected: selected == 'Family',
+                              ),
+                            ),
+                          ],
+                        );
+                      },
                     ),
+
                     const SizedBox(height: 12),
 
-                    walletBalanceCard(
-                      balance: walletBalance,
-                      selectedMethod: selectedMethod,
-                      onTap:
-                          () =>
-                              setState(() => selectedMethod = "Wallet balance"),
-                      context: context,
-                    ),
-
-                    const SizedBox(height: 16),
-                    const Divider(thickness: 1),
-                    const SizedBox(height: 16),
-
-                    const Text(
-                      "Payment methods",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-
-                    _paymentOption(
-                      "Apple Pay",
-                      Image.asset('images/applePay.png', width: 56, height: 41),
-                      selectedMethod == "Apple Pay",
-                      () => setState(() => selectedMethod = "Apple Pay"),
-                    ),
-                    _paymentOption(
-                      "Cash",
-                      Image.asset('images/cash.png', width: 56, height: 41),
-                      selectedMethod == "Cash",
-                      () => setState(() => selectedMethod = "Cash"),
-                    ),
-                    _paymentOption(
-                      "credit card",
-                      Image.asset(
-                        'images/creditCard.png',
-                        width: 64,
-                        height: 64,
-                      ),
-                      selectedMethod == "Card",
-                      () => setState(() => selectedMethod = "Card"),
-                    ),
+                   
+                    const SizedBox(height: 8),
                   ],
                 ),
               ),
@@ -336,7 +326,7 @@ class _PaymentTypePageState extends State<PaymentTypePage> {
                         text: "Select",
                         isActive: true,
                         onPressed: () {
-                          Get.toNamed('/Actcard');
+                          Get.toNamed('/payment');
                         },
                       ),
                     ),
@@ -349,114 +339,4 @@ class _PaymentTypePageState extends State<PaymentTypePage> {
       ),
     );
   }
-
-  Widget _paymentOption(
-    String label,
-    Widget leadingIcon,
-    bool isSelected,
-    VoidCallback onTap, {
-    bool isAdd = false,
-  }) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      onTap: onTap,
-      leading: leadingIcon,
-      title: Text(label, style: const TextStyle(fontSize: 15)),
-      trailing:
-          isAdd
-              ? const Icon(Icons.add, color: Colors.grey)
-              : isSelected
-              ? const Icon(Icons.check_circle, color: Colors.deepPurple)
-              : const Icon(Icons.circle_outlined, color: Colors.grey),
-    );
-  }
-}
-
-Widget walletBalanceCard({
-  required BuildContext context, // 👈 Add this
-  required int balance,
-  required String selectedMethod,
-  required VoidCallback onTap,
-}) {
-  final isSelectable = balance > 0;
-  final isSelected = selectedMethod == "Wallet balance" && isSelectable;
-
-  return GestureDetector(
-    onTap: () {
-      if (isSelectable) {
-        onTap();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Wallet selected ✅"),
-            duration: Duration(seconds: 2),
-            backgroundColor: Colors.deepPurple,
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              "You don't have enough balance to use the wallet.",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            duration: Duration(seconds: 2),
-            backgroundColor: Colors.white,
-          ),
-        );
-      }
-    },
-    child: Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFFE2D9F3),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Wallet balance",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF563B9C),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Image.asset(
-                    'images/saudiriyalsymbol.png',
-                    width: 32,
-                    height: 32,
-                    color: Colors.white,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    "$balance",
-                    style: const TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF6A42C2),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const Spacer(),
-          isSelected
-              ? const Icon(Icons.check_circle, color: Color(0xFF6A42C2))
-              : const Icon(Icons.circle_outlined, color: Colors.grey),
-        ],
-      ),
-    ),
-  );
 }

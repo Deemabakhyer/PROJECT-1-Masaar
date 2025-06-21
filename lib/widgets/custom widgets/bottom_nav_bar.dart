@@ -1,21 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:masaar/views/Home_views/home_page.dart';
-// import 'package:masaar/views/home_page.dart';
+import 'package:masaar/views/ride%20booking/home_page.dart';
 
-// Main App
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: BottomNavBar(),
-    );
-  }
-}
-
-// BottomNavBar Scaffold
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
 
