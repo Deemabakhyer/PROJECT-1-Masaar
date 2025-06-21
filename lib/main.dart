@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:masaar/views/ride%20booking%20views/addcard.dart';
 import 'package:masaar/views/ride%20booking/active_cards.dart';
 import 'package:masaar/views/ride%20booking/destination_confirmation.dart';
 import 'package:masaar/views/ride%20booking/home_page.dart';
@@ -34,7 +33,7 @@ Future<void> main() async {
     GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home: BottomNavBar(),
-      initialRoute: '/ride_simulation',
+      initialRoute: '/Home',
       getPages: [
         GetPage(name: '/Home', page: () => HomePage()),
         GetPage(name: '/route', page: () => RoutePage()),
@@ -42,7 +41,6 @@ Future<void> main() async {
         GetPage(name: '/Destination', page: () => Destinationconfirmation()),
         GetPage(name: '/package_type', page: () => PackageTypesPage()),
         GetPage(name: '/payment', page: () => PaymentTypePage()),
-        GetPage(name: '/card', page: () => AddCard()),
         GetPage(name: '/Actcard', page: () => ActiveCards()),
         GetPage(name: '/assigning_driver', page: () => AssigningDriver()),
         GetPage(name: '/ride_simulation', page: () => RideSimulation()),

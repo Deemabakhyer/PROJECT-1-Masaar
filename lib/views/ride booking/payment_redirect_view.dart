@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PaymentRedirectView extends StatelessWidget {
@@ -20,6 +21,7 @@ class PaymentRedirectView extends StatelessWidget {
                     if (nav.url.contains("success") ||
                         nav.url.contains("paid")) {
                       Navigator.pop(context); // Close WebView
+                      // Get.toNamed('/assigning_driver');
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text("Payment completed successfully"),

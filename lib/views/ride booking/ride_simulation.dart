@@ -6,9 +6,16 @@ import 'package:masaar/views/ride%20booking/my_map.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:masaar/widgets/bottom%20sheets/ride_details.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+// import 'package:masaar/models/place.dart';
 
 class RideSimulation extends StatefulWidget {
-  const RideSimulation({super.key});
+  const RideSimulation({super.key, 
+  // required this.state, required this.driverID, required this.pickup, required this.destination
+  });
+  // final String state;
+  // final int driverID;
+  // final Place pickup;
+  // final Place destination;
 
   @override
   State<RideSimulation> createState() => _RideSimulationState();
@@ -119,6 +126,8 @@ class _RideSimulationState extends State<RideSimulation> {
           ),
           RideDetails(
             state: 'Your journey has\n started',
+            // pickup: ,
+            // destination: ,
             driverID: driverID!,
           ),
         ],

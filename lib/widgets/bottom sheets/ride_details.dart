@@ -1,31 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:masaar/controllers/location_controller.dart';
 import 'package:masaar/widgets/custom%20widgets/cancel_ride_button.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class RideDetails extends StatefulWidget {
-  const RideDetails({super.key, required this.state, required this.driverID});
+  const RideDetails({
+    super.key,
+    required this.state,
+    required this.driverID,
+    // required this.pickup,
+    // required this.destination,
+  });
 
   final String state;
   final int driverID;
-  // final String pickupLocation;
-  // final String destinationLocation;
+  // final String pickup;
+  // final String destination;
 
   @override
   State<RideDetails> createState() => _RideDetailsState();
 }
 
 class _RideDetailsState extends State<RideDetails> {
+    final locationController = Get.put(LocationController());
   final user = Supabase.instance.client.auth.currentUser;
-  late final int customerID;
+  late final String customerID;
   Map<String, dynamic>? _driver;
   bool _loading = true;
 
   @override
   void initState() {
     super.initState();
-    customerID = int.tryParse(user?.id ?? '0') ?? 0;
+    customerID = user?.id ?? '';
+
     fetchDriverInfo();
   }
 
@@ -57,7 +66,7 @@ class _RideDetailsState extends State<RideDetails> {
 
   Future<void> saveRide({
     required int driverID,
-    required int customerID,
+    required String customerID,
     required String pickup,
     required String destination,
   }) async {
@@ -65,6 +74,7 @@ class _RideDetailsState extends State<RideDetails> {
       await Supabase.instance.client.from('rides').insert({
         'driver_id': driverID,
         'customer_id': customerID,
+        'payment_id': null,
         'pickup': pickup,
         'destination': destination,
       });
@@ -85,12 +95,13 @@ class _RideDetailsState extends State<RideDetails> {
 
   @override
   void dispose() {
-    saveRide(
-      driverID: widget.driverID,
-      customerID: customerID,
-      pickup: 'Wadi Makkah Company',
-      destination: 'Masjid Al-Haram',
-    );
+    // // saveRide(
+    //   driverID: widget.driverID,
+    //   customerID: customerID,
+    //   // pickup: widget.pickup,
+    //   // destination: widget.destination,
+    // );
+
     super.dispose();
   }
 
@@ -265,20 +276,40 @@ class _RideDetailsState extends State<RideDetails> {
                   'My route',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
                 ),
-                const ListTile(
-                  leading: Icon(Icons.location_on, color: Color(0xFF6A42C2)),
-                  title: Text(
-                    'Wadi Makkah Company',
-                    style: TextStyle(fontSize: 20, color: Color(0xFF69696B)),
+                 GestureDetector(
+                  onTap: () async {
+                    await locationController.getCurrentLocation();
+                    Get.toNamed(
+                      '/route',
+                      arguments: {
+                        'origin': locationController.currentAddress.value,
+                      },
+                    );
+                  },
+                  child: Obx(
+                    () => Text(
+                      locationController.currentAddress.value.isEmpty
+                          ? ""
+                          : locationController.currentAddress.value,
+                      style: const TextStyle(fontWeight: FontWeight.w500),
+                    ),
                   ),
                 ),
-                const ListTile(
-                  leading: Icon(Icons.add, color: Color(0xFF6A42C2)),
-                  title: Text(
-                    'Add stop',
-                    style: TextStyle(fontSize: 20, color: Color(0xFF919191)),
-                  ),
-                ),
+                // const ListTile(
+                //   leading: Icon(Icons.location_on, color: Color(0xFF6A42C2)),
+                //   title: 
+                //   // Text(
+                //   //   'Wadi Makkah Company',
+                //   //   style: TextStyle(fontSize: 20, color: Color(0xFF69696B)),
+                //   // ),
+                // ),
+                // // const ListTile(
+                // //   leading: Icon(Icons.add, color: Color(0xFF6A42C2)),
+                // //   title: Text(
+                // //     'Add stop',
+                // //     style: TextStyle(fontSize: 20, color: Color(0xFF919191)),
+                // //   ),
+                // // ),
                 const ListTile(
                   leading: Icon(Icons.place, color: Color(0xFF6A42C2)),
                   title: Text(
@@ -286,16 +317,16 @@ class _RideDetailsState extends State<RideDetails> {
                     style: TextStyle(fontSize: 20, color: Color(0xFF69696B)),
                   ),
                 ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      'Edit destinations',
-                      style: TextStyle(color: Color(0xFF6A42C2)),
-                    ),
-                  ),
-                ),
+                // Align(
+                //   alignment: Alignment.centerRight,
+                //   child: TextButton(
+                //     onPressed: () {},
+                //     child: const Text(
+                //       'Edit destinations',
+                //       style: TextStyle(color: Color(0xFF6A42C2)),
+                //     ),
+                //   ),
+                // ),
                 const Divider(),
                 const Text(
                   'Payment method',

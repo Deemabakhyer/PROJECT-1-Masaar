@@ -101,7 +101,7 @@ class CustomCarOption2 extends StatelessWidget {
               ),
               SizedBox(width: 4),
 
-              Image.asset('images/saudiriyalsymbol.png', height: 16, width: 18),
+              Image.asset('images/saudi-riyal-symbol.png', height: 16, width: 18),
             ],
           ),
         ],
