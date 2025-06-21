@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:masaar/widgets/custom%20widgets/cancel_ride_avatar.dart';
+import 'package:masaar/widgets/custom%20widgets/cancel_ride_button.dart';
 
-class DraggableBottomSheet extends StatefulWidget {
-  const DraggableBottomSheet({super.key});
+class DriverLoading extends StatefulWidget {
+  const DriverLoading({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _DraggableBottomSheetState createState() => _DraggableBottomSheetState();
+  _DriverLoadingState createState() => _DriverLoadingState();
 }
 
-class _DraggableBottomSheetState extends State<DraggableBottomSheet>
+class _DriverLoadingState extends State<DriverLoading>
     with SingleTickerProviderStateMixin {
   late AnimationController controller;
   int _currentPage = 0; // Keeps track of which content is showing

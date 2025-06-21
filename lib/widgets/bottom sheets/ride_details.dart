@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:masaar/widgets/custom%20widgets/cancel_ride_avatar.dart';
+import 'package:masaar/widgets/custom%20widgets/cancel_ride_button.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 

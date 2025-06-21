@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:masaar/widgets/popups/cancel_ride_popup.dart';
+import 'package:masaar/widgets/popups/cancel_ride.dart';
 
 class CancelRideAvatar extends StatelessWidget {
   const CancelRideAvatar({super.key});

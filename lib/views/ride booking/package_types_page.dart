@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:masaar/controllers/location_controller.dart';
 import 'package:masaar/widgets/custom%20widgets/custom_button.dart';
-import 'package:masaar/widgets/custom%20widgets/custom_car_option2.dart';
+import 'package:masaar/widgets/custom%20widgets/custom_car_option.dart';
 
 class PackageTypesPage extends StatefulWidget {
   const PackageTypesPage({super.key});

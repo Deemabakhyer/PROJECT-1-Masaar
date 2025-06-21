@@ -1,16 +1,18 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 
-class CustomCarOption extends StatelessWidget {
+class CustomCarOption2 extends StatelessWidget {
   final bool isSelected;
 
-  const CustomCarOption({
+  const CustomCarOption2({
     super.key,
     required this.carOption,
     required this.price,
     required this.arrivalTime,
     required this.carImg,
     required this.capacity,
-    this.isSelected = false, 
+    this.isSelected = false,
   });
 
   final String carOption;
@@ -24,10 +26,24 @@ class CustomCarOption extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border(
-          bottom: BorderSide(color: const Color(0xFFE0E0E0), width: 1.0),
-        ),
+        border:
+            isSelected
+                ? Border.all(color: const Color(0xFF6A42C2), width: 2.0)
+                : null,
+
+        borderRadius: BorderRadius.circular(12),
+        boxShadow:
+            isSelected
+                ? [
+                  BoxShadow(
+                    color: const Color(0xFF6A42C2).withOpacity(0.3),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+                : [],
       ),
+
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Column(
         mainAxisSize: MainAxisSize.min,

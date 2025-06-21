@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:masaar/views/ride%20booking%20views/home_page.dart';
+import 'package:masaar/views/ride%20booking/home_page.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});

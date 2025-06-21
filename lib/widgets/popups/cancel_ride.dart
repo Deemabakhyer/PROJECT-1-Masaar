@@ -34,7 +34,6 @@ class _CancelRidePopupState extends State<CancelRidePopup> {
               ),
             ),
             const SizedBox(height: 10),
-            // Illustration (replace with your image asset or network)
             Image.asset(
               'images/undraw_cancel_7zdh.png',
               width: 96,
@@ -70,6 +69,7 @@ class _CancelRidePopupState extends State<CancelRidePopup> {
                   text: "Cancel Ride",
                   isActive: true,
                   onPressed: () {
+                    Get.back(); // Close this dialog first
                     showDialog(
                       context: context,
                       builder: (context) {
@@ -91,7 +91,7 @@ class _CancelRidePopupState extends State<CancelRidePopup> {
                                       child: IconButton(
                                         icon: const Icon(Icons.close),
                                         onPressed: () {
-                                          Navigator.of(context).pop();
+                                          Get.back();
                                         },
                                       ),
                                     ),
@@ -168,6 +168,7 @@ class _CancelRidePopupState extends State<CancelRidePopup> {
                                       text: 'Submit & Cancel',
                                       isActive: true,
                                       onPressed: () {
+                                        Get.back(); // Close the "Why cancel?" dialog
                                         showDialog(
                                           context: context,
                                           builder: (context) {
