@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:masaar/controllers/location_controller.dart';
-import 'package:masaar/widgets/CustomSearchBar2.dart';
+import 'package:masaar/widgets/custom%20widgets/CustomSearchBar2.dart';
 
 class RoutePage extends StatefulWidget {
   const RoutePage({super.key});

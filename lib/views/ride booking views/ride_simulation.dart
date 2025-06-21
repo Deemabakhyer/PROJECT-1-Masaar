@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:masaar/views/my_map.dart';
+import 'package:masaar/views/ride%20booking%20views/my_map.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:masaar/widgets/draggable%20scrollable%20bottom%20sheets/ride_details.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

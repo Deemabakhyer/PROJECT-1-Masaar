@@ -9,18 +9,23 @@ class RideDetails extends StatefulWidget {
 
   final String state;
   final int driverID;
+  // final String pickupLocation;
+  // final String destinationLocation;
 
   @override
   State<RideDetails> createState() => _RideDetailsState();
 }
 
 class _RideDetailsState extends State<RideDetails> {
+  final user = Supabase.instance.client.auth.currentUser;
+  late final int customerID;
   Map<String, dynamic>? _driver;
   bool _loading = true;
 
   @override
   void initState() {
     super.initState();
+    customerID = int.tryParse(user?.id ?? '0') ?? 0;
     fetchDriverInfo();
   }
 
@@ -48,6 +53,45 @@ class _RideDetailsState extends State<RideDetails> {
       _driver = response;
       _loading = false;
     });
+  }
+
+  Future<void> saveRide({
+    required int driverID,
+    required int customerID,
+    required String pickup,
+    required String destination,
+  }) async {
+    try {
+      await Supabase.instance.client.from('rides').insert({
+        'driver_id': driverID,
+        'customer_id': customerID,
+        'pickup': pickup,
+        'destination': destination,
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Ride saved successfully')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Failed to save ride: $e')));
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    saveRide(
+      driverID: widget.driverID,
+      customerID: customerID,
+      pickup: 'Wadi Makkah Company',
+      destination: 'Masjid Al-Haram',
+    );
+    super.dispose();
   }
 
   @override

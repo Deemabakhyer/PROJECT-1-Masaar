@@ -2,41 +2,77 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:masaar/controllers/location_controller.dart';
-import 'package:masaar/widgets/custom_button.dart';
-import 'package:masaar/widgets/custom_car_option2.dart';
+import 'package:masaar/widgets/custom%20widgets/custom_button.dart';
 
-class PackageTypesPage extends StatefulWidget {
-  const PackageTypesPage({super.key});
+class Routeconfirmation extends StatefulWidget {
+  const Routeconfirmation({super.key});
 
   @override
-  State<PackageTypesPage> createState() => _PackageTypesPageState();
+  State<Routeconfirmation> createState() => _RouteconfirmationState();
 }
 
-class _PackageTypesPageState extends State<PackageTypesPage> {
+class _RouteconfirmationState extends State<Routeconfirmation> {
   final MapController _mapController = MapController();
   final locationController = Get.put(LocationController());
-  final selectedCarOption = ValueNotifier<String?>(null);
 
-  final List<String> items = ['Cash', 'Apple Pay', 'Credit/Debit Card'];
-  final valueListenable = ValueNotifier<String?>(null);
   LatLng? selectedPoint;
   String selectedAddress = '';
-
   @override
   void initState() {
     super.initState();
 
     Future.delayed(Duration.zero, () {
-      final destination = locationController.destinationLocation.value;
-      if (destination != null) {
-        _mapController.move(destination, 16);
+      final fromArgs = Get.arguments?['pickup'] as LatLng?;
+      if (fromArgs != null) {
+        selectedPoint = fromArgs;
+        selectedAddress = locationController.currentAddress.value;
+        _mapController.move(fromArgs, 16);
+        setState(() {});
+      } else {
+        final pickup = locationController.pickupLocation.value;
+        if (pickup != null) {
+          selectedPoint = pickup;
+          selectedAddress = locationController.currentAddress.value;
+          _mapController.move(pickup, 16);
+          setState(() {});
+        }
+      }
+    });
+  }
+
+  Future<void> handleMapTap(LatLng point) async {
+    setState(() {
+      selectedPoint = point;
+      selectedAddress = '';
+    });
+
+    Get.dialog(
+      const Center(child: CircularProgressIndicator()),
+      barrierDismissible: false,
+    );
+
+    try {
+      List<Placemark> places = await placemarkFromCoordinates(
+        point.latitude,
+        point.longitude,
+      );
+
+      if (places.isNotEmpty) {
+        final place = places.first;
+        final address = "${place.name}, ${place.locality}";
         setState(() {
-          selectedPoint = destination; 
-          selectedAddress = locationController.destinationAddress.value;
+          selectedAddress = address;
+          locationController.pickupAddressController.text = address;
+          locationController.currentAddress.value = address;
         });
       }
-    }); 
+    } catch (e) {
+      Get.snackbar("Error", "Could not get location name.");
+    } finally {
+      Get.back();
+    }
   }
 
   @override
@@ -48,7 +84,8 @@ class _PackageTypesPageState extends State<PackageTypesPage> {
             mapController: _mapController,
             options: MapOptions(
               initialCenter: const LatLng(21.4167, 39.8167),
-              initialZoom: 15,
+              initialZoom: 16,
+              onTap: (tapPosition, point) => handleMapTap(point),
             ),
             children: [
               TileLayer(
@@ -56,10 +93,12 @@ class _PackageTypesPageState extends State<PackageTypesPage> {
                 userAgentPackageName: 'com.example.app',
               ),
               Obx(() {
-                final pickup = locationController.pickupLocation.value;
+                final pickup =
+                    selectedPoint ?? locationController.pickupLocation.value;
                 final destination =
                     locationController.destinationLocation.value;
-                final current = locationController.currentLocation.value;
+                final currentLocation =
+                    locationController.currentLocation.value;
 
                 List<Marker> markers = [];
                 List<Polyline> polylines = [];
@@ -68,20 +107,13 @@ class _PackageTypesPageState extends State<PackageTypesPage> {
                   markers.add(
                     Marker(
                       point: pickup,
-                      width: 40,
-                      height: 40,
-                      child: Image.asset('images/pickup.png'),
-                    ),
-                  );
-                }
-
-                if (destination != null) {
-                  markers.add(
-                    Marker(
-                      point: destination,
-                      width: 40,
-                      height: 40,
-                      child: Image.asset('images/des.png'),
+                      width: 60,
+                      height: 60,
+                      child: Image.asset(
+                        "images/pickup.png",
+                        width: 40,
+                        height: 73,
+                      ),
                     ),
                   );
                 }
@@ -98,7 +130,7 @@ class _PackageTypesPageState extends State<PackageTypesPage> {
 
                 markers.add(
                   Marker(
-                    point: current,
+                    point: currentLocation,
                     width: 100,
                     height: 100,
                     child: Stack(
@@ -150,11 +182,11 @@ class _PackageTypesPageState extends State<PackageTypesPage> {
                     MarkerLayer(markers: markers),
                     // LOCATION BUTTON
                     Positioned(
-                      top: 400,
+                      bottom: 200,
                       right: 16,
                       child: GestureDetector(
                         onTap: () {
-                          _mapController.move(current, 16);
+                          _mapController.move(currentLocation, 16);
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -162,7 +194,7 @@ class _PackageTypesPageState extends State<PackageTypesPage> {
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
+                                color: Colors.black.withValues(alpha: 0.2),
                                 blurRadius: 8,
                                 offset: const Offset(0, 3),
                               ),
@@ -182,7 +214,6 @@ class _PackageTypesPageState extends State<PackageTypesPage> {
             ],
           ),
 
-   
           Positioned(
             top: 50,
             left: 16,
@@ -196,93 +227,7 @@ class _PackageTypesPageState extends State<PackageTypesPage> {
               ),
             ),
           ),
-         
-          // Bottom Sheet
-          Positioned(
-            bottom: 100,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 50),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 8,
-                    offset: Offset(0, -2),
-                  ),
-                ],
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      width: 40,
-                      height: 4,
-                      margin: const EdgeInsets.only(bottom: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[400],
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
 
-                    ValueListenableBuilder<String?>(
-                      valueListenable: selectedCarOption,
-                      builder: (context, selected, _) {
-                        return Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () => selectedCarOption.value = 'Saver',
-                              child: CustomCarOption2(
-                                carOption: 'Saver',
-                                price: '35',
-                                arrivalTime: '9 min',
-                                carImg: 'images/saver-car.png',
-                                capacity: '4',
-                                isSelected: selected == 'Saver',
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () => selectedCarOption.value = 'Comfort',
-                              child: CustomCarOption2(
-                                carOption: 'Comfort',
-                                price: '48',
-                                arrivalTime: '12 min',
-                                carImg: 'images/comfort-car.png',
-                                capacity: '4',
-                                isSelected: selected == 'Comfort',
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () => selectedCarOption.value = 'Family',
-                              child: CustomCarOption2(
-                                carOption: 'Family',
-                                price: '86',
-                                arrivalTime: '12 min',
-                                carImg: 'images/family-car.png',
-                                capacity: '7',
-                                isSelected: selected == 'Family',
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-
-                    const SizedBox(height: 12),
-
-                   
-                    const SizedBox(height: 8),
-                  ],
-                ),
-              ),
-            ),
-          ),
           Positioned(
             bottom: 0,
             left: 0,
@@ -316,15 +261,24 @@ class _PackageTypesPageState extends State<PackageTypesPage> {
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
+                    Text(
+                      selectedAddress.isEmpty ? " " : selectedAddress,
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 28,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: -0.33,
+                      ),
+                    ),
 
                     const SizedBox(height: 12),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 20),
                       child: CustomButton(
-                        text: "Select",
+                        text: "Confirm Pickup",
                         isActive: true,
                         onPressed: () {
-                          Get.toNamed('/payment');
+                          Get.toNamed('/route');
                         },
                       ),
                     ),

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:masaar/controllers/location_controller.dart';
-import 'package:masaar/widgets/custom_button.dart';
+import 'package:masaar/widgets/custom%20widgets/custom_button.dart';
 
 class PaymentTypePage extends StatefulWidget {
   const PaymentTypePage({super.key});
@@ -31,11 +30,11 @@ class _PaymentTypePageState extends State<PaymentTypePage> {
       if (destination != null) {
         _mapController.move(destination, 16);
         setState(() {
-          selectedPoint = destination; 
+          selectedPoint = destination;
           selectedAddress = locationController.destinationAddress.value;
         });
       }
-    }); 
+    });
   }
 
   @override
@@ -169,7 +168,7 @@ class _PaymentTypePageState extends State<PaymentTypePage> {
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
+                                color: Colors.black.withValues(alpha: 0.2),
                                 blurRadius: 8,
                                 offset: const Offset(0, 3),
                               ),
@@ -189,8 +188,6 @@ class _PaymentTypePageState extends State<PaymentTypePage> {
             ],
           ),
 
-         
-        
           Positioned(
             top: 50,
             left: 16,
