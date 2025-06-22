@@ -7,7 +7,9 @@ class PersonalInformation extends StatelessWidget {
   // ignore: use_super_parameters
   PersonalInformation({Key? key}) : super(key: key);
 
-  final AccountController accountController = Get.put(AccountController());
+final AccountController accountController = Get.isRegistered<AccountController>()
+    ? Get.find<AccountController>()
+    : Get.put(AccountController());
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +81,7 @@ class PersonalInformation extends StatelessWidget {
                                     : (imageUrl != null && imageUrl.isNotEmpty)
                                     ? NetworkImage(imageUrl) as ImageProvider
                                     : AssetImage(
-                                      'assets/images/profile_upload.png',
+                                      'images/profile_upload.png',
                                     ),
                           );
                         }),

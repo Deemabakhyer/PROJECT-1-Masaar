@@ -57,53 +57,49 @@ class _MyMapState extends State<MyMap> {
     );
   }
 
- Future<void> _loadCustomMarkers() async {
-  pickupIcon = await BitmapDescriptor.fromAssetImage(
-    const ImageConfiguration(size: Size(48, 48)),
-    'images/pickup-pin-removebg-preview.png',
-  );
+  Future<void> _loadCustomMarkers() async {
+    pickupIcon = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(size: Size(48, 48)),
+      'images/pickup-pin-removebg-preview.png',
+    );
 
-  destinationIcon = await BitmapDescriptor.fromAssetImage(
-    const ImageConfiguration(size: Size(48, 48)),
-    'images/destination-pin-removebg-preview.png',
-  );
+    destinationIcon = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(size: Size(48, 48)),
+      'images/destination-pin-removebg-preview.png',
+    );
 
-  carIcon = await BitmapDescriptor.fromAssetImage(
-    const ImageConfiguration(size: Size(48, 48)),
-    'images/small-car.png',
-  );
+    carIcon = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(size: Size(48, 48)),
+      'images/small-car.png',
+    );
 
-  setState(() {
-    if (widget.pickupLocation != null) {
-      _markers.add(
-        Marker(
-          markerId: const MarkerId('pickup'),
-          position: widget.pickupLocation!,
-          icon: pickupIcon,
-          infoWindow: const InfoWindow(title: 'Pickup'),
-        ),
-      );
+    setState(() {
+      if (widget.pickupLocation != null) {
+        _markers.add(
+          Marker(
+            markerId: const MarkerId('pickup'),
+            position: widget.pickupLocation!,
+            icon: pickupIcon,
+            infoWindow: const InfoWindow(title: 'Pickup'),
+          ),
+        );
+      }
+
+      if (widget.destinationLocation != null) {
+        _markers.add(
+          Marker(
+            markerId: const MarkerId('destination'),
+            position: widget.destinationLocation!,
+            icon: destinationIcon,
+            infoWindow: const InfoWindow(title: 'Destination'),
+          ),
+        );
+      }
+    });
+    if (widget.simulateRoute) {
+      await _fetchRoute('driver-pickup');
     }
-
-    if (widget.destinationLocation != null) {
-      _markers.add(
-        Marker(
-          markerId: const MarkerId('destination'),
-          position: widget.destinationLocation!,
-          icon: destinationIcon,
-          infoWindow: const InfoWindow(title: 'Destination'),
-        ),
-      );
-    }
-  });
-
-  if (widget.simulateRoute) {
-    await _fetchRoute('driver-pickup');
-    await Future.delayed(const Duration(milliseconds: 500));
-    await _fetchRoute('pickup-destination');
   }
-}
-
 
   List<LatLng> _decodePolyline(String encoded) {
     List<LatLng> polyline = [];
@@ -135,57 +131,46 @@ class _MyMapState extends State<MyMap> {
     return polyline;
   }
 
- Future<void> _fetchRoute(String routeCase) async {
-  final apiKey = 'AIzaSyAZFxQXdretZtaviMcwu8nFLHyT7DI1kNg';
-  String? url;
-  String polylineId;
-  Color color;
+  Future<void> _fetchRoute(String routeCase) async {
+    final apiKey = 'AIzaSyAZFxQXdretZtaviMcwu8nFLHyT7DI1kNg';
+    String? url;
+    switch (routeCase) {
+      case 'driver-pickup':
+        url =
+            'https://maps.googleapis.com/maps/api/directions/json?origin=${widget.driverLocation!.latitude},${widget.driverLocation!.longitude}&destination=${widget.pickupLocation!.latitude},${widget.pickupLocation!.longitude}&key=$apiKey';
+        break;
 
-  switch (routeCase) {
-    case 'driver-pickup':
-      url =
-          'https://maps.googleapis.com/maps/api/directions/json?origin=${widget.driverLocation!.latitude},${widget.driverLocation!.longitude}&destination=${widget.pickupLocation!.latitude},${widget.pickupLocation!.longitude}&key=$apiKey';
-      polylineId = 'driver-pickup';
-      color = Colors.grey;
-      break;
+      case 'pickup-destination':
+        url =
+            'https://maps.googleapis.com/maps/api/directions/json?origin=${widget.pickupLocation!.latitude},${widget.pickupLocation!.longitude}&destination=${widget.destinationLocation!.latitude},${widget.destinationLocation!.longitude}&key=$apiKey';
+        break;
+    }
 
-    case 'pickup-destination':
-      url =
-          'https://maps.googleapis.com/maps/api/directions/json?origin=${widget.pickupLocation!.latitude},${widget.pickupLocation!.longitude}&destination=${widget.destinationLocation!.latitude},${widget.destinationLocation!.longitude}&key=$apiKey';
-      polylineId = 'pickup-destination';
-      color = const Color(0xFF6A42C2);
-      break;
+    if (url == null) return;
+    final response = await http.get(Uri.parse(url));
+    final data = jsonDecode(response.body);
 
-    default:
-      return;
-  }
-
-  final response = await http.get(Uri.parse(url));
-  final data = jsonDecode(response.body);
-
-  if (data['status'] == 'OK') {
-    final points = _decodePolyline(data['routes'][0]['overview_polyline']['points']);
-
-    setState(() {
-      if (routeCase == 'driver-pickup') {
-        _routePoints = points; 
-      }
-      _polylines.add(
-        Polyline(
-          polylineId: PolylineId(polylineId),
-          points: points,
-          color: color,
-          width: 5,
-        ),
+    if (data['status'] == 'OK') {
+      final points = _decodePolyline(
+        data['routes'][0]['overview_polyline']['points'],
       );
-    });
 
-    if (routeCase == 'driver-pickup') {
-      _startSimulation(); 
+      setState(() {
+        _routePoints.clear();
+        _polylines.clear();
+        _routePoints = points;
+        _polylines.add(
+          Polyline(
+            polylineId: const PolylineId('route'),
+            points: _routePoints,
+            color: const Color(0xFF6A42C2),
+            width: 5,
+          ),
+        );
+      });
+      _startSimulation();
     }
   }
-}
-
 
   void _startSimulation() {
     const duration = Duration(milliseconds: 1000);

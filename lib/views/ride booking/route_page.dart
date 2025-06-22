@@ -15,7 +15,9 @@ class RoutePage extends StatefulWidget {
 }
 
 class _RoutePageState extends State<RoutePage> {
-  final locationController = Get.put(LocationController());
+final locationController = Get.isRegistered<LocationController>()
+    ? Get.find<LocationController>()
+    : Get.put(LocationController());
   final TextEditingController pickupController = TextEditingController();
   final TextEditingController destinationController = TextEditingController();
 

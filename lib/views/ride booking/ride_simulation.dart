@@ -2,8 +2,8 @@
 
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:masaar/controllers/location_controller.dart';
+// import 'package:get/get.dart';
+// import 'package:masaar/controllers/location_controller.dart';
 import 'package:masaar/views/ride%20booking/my_map.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:masaar/widgets/bottom%20sheets/ride_details.dart';
@@ -17,16 +17,17 @@ class RideSimulation extends StatefulWidget {
 }
 
 class _RideSimulationState extends State<RideSimulation> {
-final LocationController locationController = Get.find<LocationController>();
+  // final LocationController locationController = Get.put(LocationController());
   Map<String, dynamic>? _driver;
   int? driverID;
   @override
   void initState() {
     super.initState();
     fetchClosestDriver(
-      locationController.pickupLocation.value is LatLng
-          ? locationController.pickupLocation.value as LatLng
-          : LatLng(21.324716237626838, 39.959200490595784),
+      // locationController.pickupLocation.value is LatLng
+      //     ? locationController.pickupLocation.value as LatLng
+      //     : 
+          LatLng(21.331765452289016, 39.953146125751374),
     );
   }
 
@@ -116,13 +117,15 @@ final LocationController locationController = Get.find<LocationController>();
         children: [
           MyMap(
             pickupLocation:
-                locationController.pickupLocation.value is LatLng
-                    ? locationController.pickupLocation.value as LatLng
-                    : LatLng(21.324716237626838, 39.959200490595784),
+                // locationController.pickupLocation.value is LatLng
+                //     ? locationController.pickupLocation.value as LatLng
+                //     : 
+                    LatLng(21.331765452289016, 39.953146125751374),
             destinationLocation:
-                locationController.destinationLocation.value is LatLng
-                    ? locationController.destinationLocation.value as LatLng
-                    : LatLng(21.360190460922826, 39.90474913662535),
+                // locationController.destinationLocation.value is LatLng
+                //     ? locationController.destinationLocation.value as LatLng
+                //     : 
+                    LatLng(21.422171165974092, 39.839001057520605),
             driverID: driverID!,
             driverLocation: LatLng(
               _driver!['latitude'] as double,

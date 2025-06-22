@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:masaar/main.dart';
 import 'package:masaar/widgets/custom%20widgets/custom_button.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -247,7 +248,7 @@ class _SubmitRatingState extends State<SubmitRating> {
               text: 'Return to home',
               isActive: true,
               onPressed: () {
-                Get.toNamed('/StartupScreen');
+                Get.to(StartupScreen());
               },
             ),
           ],

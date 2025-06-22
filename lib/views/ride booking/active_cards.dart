@@ -330,7 +330,7 @@ class _ActiveCardsState extends State<ActiveCards> {
                         isActive: _selectedCardIndex != null,
                         onPressed: () {
                           if (_selectedCardIndex == null) return;
-                          preparePaymentConfig(2500); // 25 SAR
+                          preparePaymentConfig(4800);
                           onSubmitCcForm();
                         },
                       ),

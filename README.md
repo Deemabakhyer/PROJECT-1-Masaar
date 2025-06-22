@@ -84,7 +84,7 @@ Update your code to load these variables using [flutter_dotenv](https://pub.dev/
 
         
 ## 💡 Watch this tutorial on how to navigate through Masaar!
-work in progres....
+![Demo](images\masaar-demo.gif)
 
 ## 🎨 UI/UX Design
 View the complete design on [Figma](https://www.figma.com/design/synPECe3VTrOajQMPtQPWh/Masaar?node-id=0-1&t=nqYHZSD7lLfXy7Ss-1).

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:masaar/main.dart';
 import 'package:masaar/widgets/custom%20widgets/custom_button.dart';
 import 'package:masaar/widgets/custom%20widgets/custom_outlined_button.dart';
 
@@ -231,7 +232,7 @@ class _CancelRidePopupState extends State<CancelRidePopup> {
                                                       text: 'Back to Home',
                                                       isActive: true,
                                                       onPressed: () {
-                                                        Get.toNamed('/StartupScreen');
+                                                        Get.to(StartupScreen());
                                                       },
                                                     ),
                                                   ],
