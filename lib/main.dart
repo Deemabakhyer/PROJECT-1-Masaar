@@ -6,7 +6,6 @@ import 'package:masaar/views/landing%20pages/splash_screen.dart';
 import 'package:masaar/views/ride%20booking/active_cards.dart';
 import 'package:masaar/views/ride%20booking/assigning_driver.dart';
 import 'package:masaar/views/ride%20booking/home_page.dart';
-import 'package:masaar/views/ride%20booking/my_chat.dart';
 import 'package:masaar/views/ride%20booking/my_map.dart';
 import 'package:masaar/views/ride%20booking/package_types_page.dart';
 import 'package:masaar/views/ride%20booking/payment_type_page.dart';
@@ -48,6 +47,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home: const StartupScreen(),  
+      initialRoute: '/ride_simulation',
       getPages: [
         GetPage(name: '/Home', page: () => HomePage()),
         GetPage(name: '/route', page: () => RoutePage()),
@@ -60,7 +60,6 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/ride_simulation', page: () => RideSimulation()),
         GetPage(name: '/submit_rating', page: () => SubmitRating()),
         GetPage(name: '/my_map', page: () => MyMap()),
-        GetPage(name: '/my_chat', page: () => MyChat()),
       ],
     );
   }

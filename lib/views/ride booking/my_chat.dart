@@ -5,7 +5,8 @@ import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:masaar/widgets/custom%20widgets/custom_app_bar.dart';
 
 class MyChat extends StatefulWidget {
-  const MyChat({super.key});
+  const MyChat({super.key, required this.driverName});
+  final String driverName;
 
   @override
   MyChatState createState() => MyChatState();
@@ -26,7 +27,7 @@ class MyChatState extends State<MyChat> {
     final chatTheme =
         brightness == Brightness.dark ? ChatTheme.dark() : ChatTheme.light();
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: CustomAppBar(driverName: widget.driverName),
       body: Chat(
         chatController: _chatController,
         currentUserId: 'user1',

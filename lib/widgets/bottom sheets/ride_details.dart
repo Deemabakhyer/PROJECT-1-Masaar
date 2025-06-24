@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:masaar/controllers/location_controller.dart';
+import 'package:masaar/views/ride%20booking/my_chat.dart';
 import 'package:masaar/widgets/custom%20widgets/cancel_ride_button.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -244,7 +245,7 @@ class _RideDetailsState extends State<RideDetails> {
                     const SizedBox(width: 8),
                     ElevatedButton(
                       onPressed: () {
-                        Get.toNamed('/my_chat');
+                        Get.to(MyChat(driverName: _driver!['name']));
                       },
                       style: ElevatedButton.styleFrom(
                         shape: const CircleBorder(),

@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   final Size preferredSize;
+  final String? driverName;
 
-  const CustomAppBar({super.key})
+  const CustomAppBar({super.key, required this.driverName})
     : preferredSize = const Size.fromHeight(120.0);
 
   @override
@@ -39,8 +40,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           // Name and avatar
           Row(
             children: [
-              const Text(
-                "Hassan",
+               Text(
+                driverName!,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 28,
